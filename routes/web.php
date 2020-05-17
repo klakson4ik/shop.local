@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/debug', 'DebugController@index');
+
+
+
+Route::resource('category', 'CategoryController');
+Route::resource('mobile', 'MobileController');
+Route::resource('Television', 'TelevisionController');
+Route::resource('Computer', 'ComputerController');
+Route::resource('large_technical', 'ComputerController');
+
