@@ -22,7 +22,6 @@
             <div class="row">
                 <div class="col d-flex justify-content-end">
                     <table-pagination-component
-                        :categories="categories"
                         @fillCat = "fillCat"
                     />
                 </div>

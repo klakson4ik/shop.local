@@ -347,8 +347,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -417,6 +415,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CategoryEditComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CategoryEditComponent */ "./resources/js/components/category/CategoryEditComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
 /* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table */ "./resources/js/components/category/table.js");
+//
 //
 //
 //
@@ -653,7 +652,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CategorySnapToAnotherComponent",
@@ -780,11 +778,6 @@ __webpack_require__.r(__webpack_exports__);
   component: {
     DropdownComponent: _DropdownComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: {
-    categories: {
-      type: Array
-    }
-  },
   data: function data() {
     return {
       start: 0,
@@ -793,6 +786,11 @@ __webpack_require__.r(__webpack_exports__);
       pass: 0,
       count: 1
     };
+  },
+  computed: {
+    categories: function categories() {
+      return this.$store.getters.getCategories;
+    }
   },
   methods: {
     splitArray: function splitArray() {
@@ -2222,6 +2220,7 @@ var render = function() {
               _c(
                 "category-template-popup-component",
                 {
+                  attrs: { title: "Привязка категории" },
                   scopedSlots: _vm._u(
                     [
                       {
@@ -2385,67 +2384,99 @@ var render = function() {
         _c(
           "div",
           { staticClass: "col d-flex justify-content-end" },
-          [
-            _c("table-pagination-component", {
-              attrs: { categories: _vm.categories },
-              on: { fillCat: _vm.fillCat }
-            })
-          ],
+          [_c("table-pagination-component", { on: { fillCat: _vm.fillCat } })],
           1
         )
       ])
     ]),
     _vm._v(" "),
-    _vm.modalVisible === true
+    _vm.modalVisible === true && _vm.modal.create === true
       ? _c(
           "div",
           [
             _c(
               "category-template-popup-component",
               {
+                attrs: { title: "Создание категории" },
                 scopedSlots: _vm._u(
                   [
-                    _vm.modal.create === true
-                      ? {
-                          key: "footer",
-                          fn: function() {
-                            return [
-                              _c("button-component", {
-                                attrs: { btnName: "Закрыть" },
-                                on: { click: _vm.closeModal }
-                              }),
-                              _vm._v(" "),
-                              _c("button-component", {
-                                attrs: { btnName: "Создать категорию" },
-                                on: { click: _vm.saveCategories }
-                              })
-                            ]
-                          },
-                          proxy: true
-                        }
-                      : null
+                    {
+                      key: "footer",
+                      fn: function() {
+                        return [
+                          _c("button-component", {
+                            attrs: { btnName: "Закрыть" },
+                            on: { click: _vm.closeModal }
+                          }),
+                          _vm._v(" "),
+                          _c("button-component", {
+                            attrs: { btnName: "Создать категорию" },
+                            on: { click: _vm.saveCategories }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
                   ],
                   null,
-                  true
+                  false,
+                  570710126
                 )
               },
               [
-                _vm.modal.create === true
-                  ? _c("div", [_c("category-create-component")], 1)
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.modal.edit === true
-                  ? _c(
-                      "div",
-                      [
-                        _c("category-edit-component", {
-                          attrs: { item: _vm.editValue }
-                        })
-                      ],
-                      1
-                    )
-                  : _vm._e()
-              ]
+                _c("category-create-component", {
+                  attrs: { title: "Создание категории" }
+                })
+              ],
+              1
+            )
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.modalVisible === true && _vm.modal.edit === true
+      ? _c(
+          "div",
+          [
+            _c(
+              "category-template-popup-component",
+              {
+                attrs: { title: "Редактирование категории" },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "footer",
+                      fn: function() {
+                        return [
+                          _c("button-component", {
+                            attrs: { btnName: "Закрыть" },
+                            on: { click: _vm.closeModal }
+                          }),
+                          _vm._v(" "),
+                          _c("button-component", {
+                            attrs: { btnName: "Сохранить" },
+                            on: { click: _vm.saveCategories }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  false,
+                  3846568011
+                )
+              },
+              [
+                _c("category-edit-component", {
+                  attrs: {
+                    title: "Редоктирование категорий",
+                    item: _vm.editValue
+                  }
+                })
+              ],
+              1
             )
           ],
           1
@@ -2569,12 +2600,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "col d-flex justify-content-end" },
-          [
-            _c("table-pagination-component", {
-              attrs: { categories: _vm.categories },
-              on: { fillCat: _vm.fillCat }
-            })
-          ],
+          [_c("table-pagination-component", { on: { fillCat: _vm.fillCat } })],
           1
         )
       ])

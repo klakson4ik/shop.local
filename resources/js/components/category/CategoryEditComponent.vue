@@ -1,6 +1,5 @@
 <template>
 
-
     <div class="container">
         <div v-for="cat of cats" :key="cats.title">
             <div class="row" v-if="cat.status==='active'">
@@ -34,11 +33,10 @@
         <button type="button" class="btn btn-primary mt-4" @click="modalVisible=true">Привязать к другой категории</button>
         <div v-if="modalVisible===true">
             <category-template-popup-component
-
+                title="Привязка категории"
             >
                 <category-snap-to-another-component
                 />
-
                 <template #footer>
                     <button-component
                         btnName="Отменить"

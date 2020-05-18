@@ -29,11 +29,6 @@
     export default {
         name: "tablePaginationComponent",
         component : {DropdownComponent},
-        props : {
-            categories : {
-                type: Array
-            },
-        },
         data : () => {
             return {
                 start : 0,
@@ -43,6 +38,11 @@
                 count : 1
             }
 
+        },
+        computed: {
+            categories(){
+                return this.$store.getters.getCategories
+            }
         },
         methods : {
             splitArray(){
