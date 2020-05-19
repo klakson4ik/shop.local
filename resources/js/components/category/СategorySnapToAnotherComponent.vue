@@ -12,7 +12,7 @@
             <tr v-for="(cat, index) of items" :key="items.index">
                 <th scope="row">{{index+1}}</th>
                 <td>{{cat.name}}</td>
-                <td><input type="radio" name="snap" class="ml-4 shadow" :checked="checkedCat = cat">
+                <td><input type="radio" name="snap" class="ml-4 shadow" :checked="checked= cat">
                 </td>
 
             </tr>
@@ -37,9 +37,10 @@
     export default {
         name: "CategorySnapToAnotherComponent",
         mixins : [tableMixin],
+        props: ['checkedCat'],
         data: () => {
             return {
-                checkedCat: '',
+                checked: '',
             }
         },
         computed: {
@@ -47,6 +48,19 @@
                 return this.$store.getters.getCategories
             }
         },
+        methods : {
+            save(){
+                console.log(this.checkedCat )
+                console.log(this.checked)
+            }
+        },
+        mounted() {
+            this.$store.subscribe((mutation , getters) => {
+                if(mutation.type === 'SNAP_TO_CATEGORY_STATUS' && getters.categoryModule.snapToCategoryStatus === true){
+                    this.save()
+                }
+            })
+        }
     }
 </script>
 
