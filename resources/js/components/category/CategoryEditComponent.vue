@@ -1,11 +1,17 @@
 <template>
 
-
     <div class="container">
         <div v-for="cat of cats" :key="cats.title">
-            <div class="row" v-if="cat.status==='active'">
-                <div class="col">
-                    <input type="text" class="p-1 mb-2 shadow form-control" :value="cat.title">
+            <div v-if="cat.status==='active'">
+                <div class="row" >
+                    <div class="col">
+                        <input type="text" class="p-1 mb-2 shadow form-control" :value="cat.title">
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col">
+                        <button type="button" class="btn btn-primary mt-4" @click="modalVisible=true">Привязать к другой категории</button>
+                    </div>
                 </div>
             </div>
             <div v-else>
@@ -31,21 +37,22 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary mt-4" @click="modalVisible=true">Привязать к другой категории</button>
+
         <div v-if="modalVisible===true">
             <category-template-popup-component
-
+                title="Привязка категории"
             >
                 <category-snap-to-another-component
+                    @close="closeModal"
                 />
-
                 <template #footer>
                     <button-component
                         btnName="Отменить"
                         @click="closeModal"
                     />
                     <button-component
-                        btnName="Сохранить"
+                        btnName="Привязать"
+                        @click="save"
                     />
                 </template>
             </category-template-popup-component>
@@ -62,23 +69,20 @@
     export default {
         name: "CategoryEditComponent",
         components: {CategoryTemplatePopupComponent , CategorySnapToAnotherComponent},
-        props : {
-            item : {
-                type: Object,
-
-            },
-        },
+        props : ['item'],
         data: () => {
             return {
                 modalVisible : false,
                 cats : [
                     {
                         title: "",
-                        status: ""
+                        status: "",
+                        id : ""
                     }
                 ],
             }
         },
+
         computed: {
             categories(){
                 return this.$store.getters.getCategories
@@ -95,6 +99,7 @@
                     let elemId = this.categories.findIndex(item=>item.id == id)
                     this.cats.unshift({
                         title: this.categories[elemId].title,
+                        id: this.categories[elemId].id,
                     })
                     this.fillParentCats(this.categories[elemId].parent_id);
                 }else{
@@ -103,9 +108,19 @@
             },
             closeModal(){
                 this.modalVisible = false
+            },
+            save(){
+                this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true)
             }
 
-        }
+        },
+        // mounted() {
+        //     this.$store.subscribe((mutation , getters) => {
+        //         if(mutation.type === 'LOAD_CATEGORIES'){
+        //             console.log(this.categories)
+        //         }
+        //     })
+        // }
     }
 </script>
 

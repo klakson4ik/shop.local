@@ -18,7 +18,6 @@ class CategoryCreate
                     'alias' => mb_strtolower($value['text']),
                     'parent_id' => $lastId
                 ));
-                dump($lastId);
                 $lastId = Category::where('title', $value['text'])->first()->id;
             }
         }

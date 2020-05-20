@@ -12,7 +12,7 @@
             <tr v-for="(cat, index) of items" :key="items.index">
                 <th scope="row">{{index+1}}</th>
                 <td>{{cat.name}}</td>
-                <td><input type="radio" name="snap" class="ml-4 shadow" :checked="checkedCat = cat">
+                <td><input type="radio" name="snap" class="ml-4 shadow"  @change = "checked(cat)">
                 </td>
 
             </tr>
@@ -22,7 +22,6 @@
             <div class="row">
                 <div class="col d-flex justify-content-end">
                     <table-pagination-component
-                        :categories="categories"
                         @fillCat = "fillCat"
                     />
                 </div>
@@ -40,14 +39,34 @@
         mixins : [tableMixin],
         data: () => {
             return {
-                checkedCat: '',
+                checkID: ''
             }
         },
         computed: {
             categories(){
                 return this.$store.getters.getCategories
+            },
+        },
+        methods : {
+            save(){
+                let checked = this.$store.getters.getCheckedCat
+                let categories = this.categories
+                checked = categories.findIndex(item=>item.id == checked)
+                categories[checked].parent_id = this.checkID
+                this.$store.dispatch('LOAD_CATEGORIES', categories)
+                this.$emit('close')
+            },
+            checked(cat){
+                this.checkID= cat.id
             }
         },
+        mounted() {
+            this.$store.subscribe((mutation , getters) => {
+                if(mutation.type === 'SNAP_TO_CATEGORY_STATUS' && getters.categoryModule.snapToCategoryStatus === true){
+                    this.save()
+                }
+            })
+        }
     }
 </script>
 

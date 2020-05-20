@@ -31,7 +31,6 @@
             <div class="row">
                 <div class="col d-flex justify-content-end">
                     <table-pagination-component
-                        :categories="categories"
                         @fillCat = "fillCat"
                     />
                 </div>
@@ -39,22 +38,15 @@
         </div>
 
 
-
-        <div v-if="modalVisible===true">
+        <div v-if="modalVisible===true && modal.create === true">
             <category-template-popup-component
+                title = "Создание категории"
             >
-                <div v-if="modal.create === true">
-                    <category-create-component
-                    />
-                </div>
-
-                <div  v-if="modal.edit === true">
-                    <category-edit-component
-                    :item = "editValue"
-                    />
-                </div>
-
-                <template #footer v-if="modal.create === true">
+                <category-create-component
+                    title="Создание категории"
+                    @close = "closeModal"
+                />
+                <template #footer>
                     <button-component
                         btnName="Закрыть"
                         @click="closeModal"
@@ -64,20 +56,28 @@
                         @click="saveCategories"
                     />
                 </template>
-<!--                <template #footer v-if="modal.edit === true">-->
-<!--                    <button-component-->
-<!--                        btnName="Закрыть"-->
-<!--                        @click="closeModal"-->
-<!--                    />-->
-<!--                    <button-component-->
-<!--                        btnName="Сохранить"-->
-<!--                        @click="saveCategories"-->
-<!--                    />-->
-<!--                </template>-->
-
             </category-template-popup-component>
         </div>
 
+        <div v-if="modalVisible===true && modal.edit === true">
+            <category-template-popup-component
+                title = "Редактирование категории">
+                <category-edit-component
+                    title="Редоктирование категорий"
+                    :item = "editValue"
+                />
+                <template #footer>
+                    <button-component
+                        btnName="Закрыть"
+                        @click="closeModal"
+                    />
+                    <button-component
+                        btnName="Сохранить"
+                        @click="saveCategories"
+                    />
+                </template>
+            </category-template-popup-component>
+        </div>
     </div>
 </template>
 
@@ -110,6 +110,7 @@
         },
         methods: {
             editItem(cat){
+                this.$store.dispatch('LOAD_CHECKED_CAT', cat.id)
                 this.editValue = cat
             },
             deleteCat(){

@@ -250,6 +250,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.addedCats.pop();
     },
     saveCategory: function saveCategory() {
+      var _this = this;
+
       fetch("category", {
         method: "POST",
         headers: {
@@ -261,21 +263,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           title: "New subcategory",
           body: this.addedCats
         })
-      }).then(function () {
-        alert('Категории добавлены');
-      })["catch"](function (error) {
-        return console.log(error);
+      }).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        return _this.$store.dispatch('LOAD_CATEGORIES', response['categories']);
       });
       this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', false);
       this.$emit('close');
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     this.$store.subscribe(function (mutation, getters) {
       if (mutation.type === 'CREATING_SUB_CATEGORY_STATUS' && getters.categoryModule.creatingSubCategoryStatus === true) {
-        _this.saveCategory();
+        _this2.saveCategory();
       }
     });
   }
@@ -349,6 +351,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -357,17 +366,14 @@ __webpack_require__.r(__webpack_exports__);
     CategoryTemplatePopupComponent: _CategoryTemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     CategorySnapToAnotherComponent: _ategorySnapToAnotherComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  props: {
-    item: {
-      type: Object
-    }
-  },
+  props: ['item'],
   data: function data() {
     return {
       modalVisible: false,
       cats: [{
         title: "",
-        status: ""
+        status: "",
+        id: ""
       }]
     };
   },
@@ -388,7 +394,8 @@ __webpack_require__.r(__webpack_exports__);
           return item.id == id;
         });
         this.cats.unshift({
-          title: this.categories[elemId].title
+          title: this.categories[elemId].title,
+          id: this.categories[elemId].id
         });
         this.fillParentCats(this.categories[elemId].parent_id);
       } else {
@@ -397,8 +404,18 @@ __webpack_require__.r(__webpack_exports__);
     },
     closeModal: function closeModal() {
       this.modalVisible = false;
+    },
+    save: function save() {
+      this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true);
     }
-  }
+  } // mounted() {
+  //     this.$store.subscribe((mutation , getters) => {
+  //         if(mutation.type === 'LOAD_CATEGORIES'){
+  //             console.log(this.categories)
+  //         }
+  //     })
+  // }
+
 });
 
 /***/ }),
@@ -531,6 +548,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     editItem: function editItem(cat) {
+      this.$store.dispatch('LOAD_CHECKED_CAT', cat.id);
       this.editValue = cat;
     },
     deleteCat: function deleteCat() {},
@@ -655,20 +673,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CategorySnapToAnotherComponent",
   mixins: [_table__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
-      checkedCat: ''
+      checkID: ''
     };
   },
   computed: {
     categories: function categories() {
       return this.$store.getters.getCategories;
     }
+  },
+  methods: {
+    save: function save() {
+      var checked = this.$store.getters.getCheckedCat;
+      var categories = this.categories;
+      checked = categories.findIndex(function (item) {
+        return item.id == checked;
+      });
+      categories[checked].parent_id = this.checkID;
+      this.$store.dispatch('LOAD_CATEGORIES', categories);
+      this.$emit('close');
+    },
+    checked: function checked(cat) {
+      this.checkID = cat.id;
+    }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$store.subscribe(function (mutation, getters) {
+      if (mutation.type === 'SNAP_TO_CATEGORY_STATUS' && getters.categoryModule.snapToCategoryStatus === true) {
+        _this.save();
+      }
+    });
   }
 });
 
@@ -782,11 +823,6 @@ __webpack_require__.r(__webpack_exports__);
   component: {
     DropdownComponent: _DropdownComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: {
-    categories: {
-      type: Array
-    }
-  },
   data: function data() {
     return {
       start: 0,
@@ -795,6 +831,11 @@ __webpack_require__.r(__webpack_exports__);
       pass: 0,
       count: 1
     };
+  },
+  computed: {
+    categories: function categories() {
+      return this.$store.getters.getCategories;
+    }
   },
   methods: {
     splitArray: function splitArray() {
@@ -2174,13 +2215,33 @@ var render = function() {
       _vm._l(_vm.cats, function(cat) {
         return _c("div", { key: _vm.cats.title }, [
           cat.status === "active"
-            ? _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("input", {
-                    staticClass: "p-1 mb-2 shadow form-control",
-                    attrs: { type: "text" },
-                    domProps: { value: cat.title }
-                  })
+            ? _c("div", [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col" }, [
+                    _c("input", {
+                      staticClass: "p-1 mb-2 shadow form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: cat.title }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary mt-4",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.modalVisible = true
+                          }
+                        }
+                      },
+                      [_vm._v("Привязать к другой категории")]
+                    )
+                  ])
                 ])
               ])
             : _c("div", [
@@ -2203,20 +2264,6 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary mt-4",
-          attrs: { type: "button" },
-          on: {
-            click: function($event) {
-              _vm.modalVisible = true
-            }
-          }
-        },
-        [_vm._v("Привязать к другой категории")]
-      ),
-      _vm._v(" "),
       _vm.modalVisible === true
         ? _c(
             "div",
@@ -2224,6 +2271,7 @@ var render = function() {
               _c(
                 "category-template-popup-component",
                 {
+                  attrs: { title: "Привязка категории" },
                   scopedSlots: _vm._u(
                     [
                       {
@@ -2236,7 +2284,8 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("button-component", {
-                              attrs: { btnName: "Сохранить" }
+                              attrs: { btnName: "Привязать" },
+                              on: { click: _vm.save }
                             })
                           ]
                         },
@@ -2245,10 +2294,14 @@ var render = function() {
                     ],
                     null,
                     false,
-                    107046655
+                    2879512137
                   )
                 },
-                [_c("category-snap-to-another-component")],
+                [
+                  _c("category-snap-to-another-component", {
+                    on: { close: _vm.closeModal }
+                  })
+                ],
                 1
               )
             ],
@@ -2387,67 +2440,100 @@ var render = function() {
         _c(
           "div",
           { staticClass: "col d-flex justify-content-end" },
-          [
-            _c("table-pagination-component", {
-              attrs: { categories: _vm.categories },
-              on: { fillCat: _vm.fillCat }
-            })
-          ],
+          [_c("table-pagination-component", { on: { fillCat: _vm.fillCat } })],
           1
         )
       ])
     ]),
     _vm._v(" "),
-    _vm.modalVisible === true
+    _vm.modalVisible === true && _vm.modal.create === true
       ? _c(
           "div",
           [
             _c(
               "category-template-popup-component",
               {
+                attrs: { title: "Создание категории" },
                 scopedSlots: _vm._u(
                   [
-                    _vm.modal.create === true
-                      ? {
-                          key: "footer",
-                          fn: function() {
-                            return [
-                              _c("button-component", {
-                                attrs: { btnName: "Закрыть" },
-                                on: { click: _vm.closeModal }
-                              }),
-                              _vm._v(" "),
-                              _c("button-component", {
-                                attrs: { btnName: "Создать категорию" },
-                                on: { click: _vm.saveCategories }
-                              })
-                            ]
-                          },
-                          proxy: true
-                        }
-                      : null
+                    {
+                      key: "footer",
+                      fn: function() {
+                        return [
+                          _c("button-component", {
+                            attrs: { btnName: "Закрыть" },
+                            on: { click: _vm.closeModal }
+                          }),
+                          _vm._v(" "),
+                          _c("button-component", {
+                            attrs: { btnName: "Создать категорию" },
+                            on: { click: _vm.saveCategories }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
                   ],
                   null,
-                  true
+                  false,
+                  570710126
                 )
               },
               [
-                _vm.modal.create === true
-                  ? _c("div", [_c("category-create-component")], 1)
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.modal.edit === true
-                  ? _c(
-                      "div",
-                      [
-                        _c("category-edit-component", {
-                          attrs: { item: _vm.editValue }
-                        })
-                      ],
-                      1
-                    )
-                  : _vm._e()
-              ]
+                _c("category-create-component", {
+                  attrs: { title: "Создание категории" },
+                  on: { close: _vm.closeModal }
+                })
+              ],
+              1
+            )
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.modalVisible === true && _vm.modal.edit === true
+      ? _c(
+          "div",
+          [
+            _c(
+              "category-template-popup-component",
+              {
+                attrs: { title: "Редактирование категории" },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "footer",
+                      fn: function() {
+                        return [
+                          _c("button-component", {
+                            attrs: { btnName: "Закрыть" },
+                            on: { click: _vm.closeModal }
+                          }),
+                          _vm._v(" "),
+                          _c("button-component", {
+                            attrs: { btnName: "Сохранить" },
+                            on: { click: _vm.saveCategories }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  false,
+                  3846568011
+                )
+              },
+              [
+                _c("category-edit-component", {
+                  attrs: {
+                    title: "Редоктирование категорий",
+                    item: _vm.editValue
+                  }
+                })
+              ],
+              1
             )
           ],
           1
@@ -2557,7 +2643,11 @@ var render = function() {
               _c("input", {
                 staticClass: "ml-4 shadow",
                 attrs: { type: "radio", name: "snap" },
-                domProps: { checked: (_vm.checkedCat = cat) }
+                on: {
+                  change: function($event) {
+                    return _vm.checked(cat)
+                  }
+                }
               })
             ])
           ])
@@ -2571,12 +2661,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "col d-flex justify-content-end" },
-          [
-            _c("table-pagination-component", {
-              attrs: { categories: _vm.categories },
-              on: { fillCat: _vm.fillCat }
-            })
-          ],
+          [_c("table-pagination-component", { on: { fillCat: _vm.fillCat } })],
           1
         )
       ])
@@ -16982,18 +17067,26 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/actions.js ***!
   \********************************************************/
-/*! exports provided: LOAD_CATEGORIES, CREATING_SUB_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(context, categories) {
   context.commit('LOAD_CATEGORIES', categories);
 }
+function LOAD_CHECKED_CAT(context, checkCatToSnap) {
+  context.commit('LOAD_CHECKED_CAT', checkCatToSnap);
+}
 function CREATING_SUB_CATEGORY_STATUS(context, creatingSubCategoryStatus) {
   context.commit('CREATING_SUB_CATEGORY_STATUS', creatingSubCategoryStatus);
+}
+function SNAP_TO_CATEGORY_STATUS(context, snapToCategoryStatus) {
+  context.commit('SNAP_TO_CATEGORY_STATUS', snapToCategoryStatus);
 }
 
 /***/ }),
@@ -17002,18 +17095,26 @@ function CREATING_SUB_CATEGORY_STATUS(context, creatingSubCategoryStatus) {
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/getters.js ***!
   \********************************************************/
-/*! exports provided: getCategories, getCreatingSubCategoryStatus */
+/*! exports provided: getCategories, getCheckedCat, getCreatingSubCategoryStatus, getSnapToCategoryStatus */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCategories", function() { return getCategories; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCheckedCat", function() { return getCheckedCat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCreatingSubCategoryStatus", function() { return getCreatingSubCategoryStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSnapToCategoryStatus", function() { return getSnapToCategoryStatus; });
 function getCategories(state) {
   return state.categories;
 }
+function getCheckedCat(state) {
+  return state.checkCatToSnap;
+}
 function getCreatingSubCategoryStatus(state) {
   return state.creatingSubCategoryStatus;
+}
+function getSnapToCategoryStatus(state) {
+  return state.snapToCategoryStatus;
 }
 
 /***/ }),
@@ -17048,18 +17149,26 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************!*\
   !*** ./resources/js/store/modules/category/mutations.js ***!
   \**********************************************************/
-/*! exports provided: LOAD_CATEGORIES, CREATING_SUB_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(state, payload) {
   state.categories = payload;
 }
+function LOAD_CHECKED_CAT(state, payload) {
+  state.checkCatToSnap = payload;
+}
 function CREATING_SUB_CATEGORY_STATUS(state, payload) {
   state.creatingSubCategoryStatus = payload;
+}
+function SNAP_TO_CATEGORY_STATUS(state, payload) {
+  state.snapToCategoryStatus = payload;
 }
 
 /***/ }),
@@ -17075,7 +17184,9 @@ function CREATING_SUB_CATEGORY_STATUS(state, payload) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   categories: [],
-  creatingSubCategoryStatus: false
+  checkCatToSnap: '',
+  creatingSubCategoryStatus: false,
+  snapToCategoryStatus: false
 });
 
 /***/ }),

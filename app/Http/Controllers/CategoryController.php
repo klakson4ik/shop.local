@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 
-class gtCategoryController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -55,7 +55,11 @@ class gtCategoryController extends Controller
             CategoryCreate::getNewBranch( $array );
         }
 
+        $categories = Category::all();
 
+        return response()->json([
+            'categories' => $categories
+        ]);
 
     }
 

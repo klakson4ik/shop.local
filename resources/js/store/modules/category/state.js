@@ -1,4 +1,6 @@
 export default {
     categories: [],
-    creatingSubCategoryStatus : false
+    checkCatToSnap : '',
+    creatingSubCategoryStatus : false,
+    snapToCategoryStatus: false
 }
