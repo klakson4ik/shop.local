@@ -55,7 +55,11 @@ class CategoryController extends Controller
             CategoryCreate::getNewBranch( $array );
         }
 
+        $categories = Category::all();
 
+        return response()->json([
+            'categories' => $categories
+        ]);
 
     }
 

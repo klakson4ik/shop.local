@@ -68,8 +68,8 @@
                         body: this.addedCats
                     })
                 })
-                    .then(() => {alert('Категории добавлены')})
-                    .catch(error => console.log(error))
+                    .then(response => (response.json()))
+                    .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
                 this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', false)
                 this.$emit('close')
 

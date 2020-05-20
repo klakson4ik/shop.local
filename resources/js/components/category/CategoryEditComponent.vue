@@ -77,11 +77,13 @@
                 cats : [
                     {
                         title: "",
-                        status: ""
+                        status: "",
+                        id : ""
                     }
                 ],
             }
         },
+
         computed: {
             categories(){
                 return this.$store.getters.getCategories
@@ -112,7 +114,14 @@
                 this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true)
             }
 
-        }
+        },
+        // mounted() {
+        //     this.$store.subscribe((mutation , getters) => {
+        //         if(mutation.type === 'LOAD_CATEGORIES'){
+        //             console.log(this.categories)
+        //         }
+        //     })
+        // }
     }
 </script>
 

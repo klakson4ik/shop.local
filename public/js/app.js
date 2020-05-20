@@ -250,6 +250,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.addedCats.pop();
     },
     saveCategory: function saveCategory() {
+      var _this = this;
+
       fetch("category", {
         method: "POST",
         headers: {
@@ -261,21 +263,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           title: "New subcategory",
           body: this.addedCats
         })
-      }).then(function () {
-        alert('Категории добавлены');
-      })["catch"](function (error) {
-        return console.log(error);
+      }).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        return _this.$store.dispatch('LOAD_CATEGORIES', response['categories']);
       });
       this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', false);
       this.$emit('close');
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     this.$store.subscribe(function (mutation, getters) {
       if (mutation.type === 'CREATING_SUB_CATEGORY_STATUS' && getters.categoryModule.creatingSubCategoryStatus === true) {
-        _this.saveCategory();
+        _this2.saveCategory();
       }
     });
   }
@@ -371,7 +373,8 @@ __webpack_require__.r(__webpack_exports__);
       modalVisible: false,
       cats: [{
         title: "",
-        status: ""
+        status: "",
+        id: ""
       }]
     };
   },
@@ -406,7 +409,14 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true);
     }
-  }
+  } // mounted() {
+  //     this.$store.subscribe((mutation , getters) => {
+  //         if(mutation.type === 'LOAD_CATEGORIES'){
+  //             console.log(this.categories)
+  //         }
+  //     })
+  // }
+
 });
 
 /***/ }),
@@ -425,6 +435,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CategoryEditComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CategoryEditComponent */ "./resources/js/components/category/CategoryEditComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
 /* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table */ "./resources/js/components/category/table.js");
+//
 //
 //
 //
@@ -679,7 +690,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     save: function save() {
-      console.log(this.checkedCat);
+      // console.log(this.checkedCat )
       console.log(this.checked);
     }
   },
@@ -2462,7 +2473,8 @@ var render = function() {
               },
               [
                 _c("category-create-component", {
-                  attrs: { title: "Создание категории" }
+                  attrs: { title: "Создание категории" },
+                  on: { close: _vm.closeModal }
                 })
               ],
               1

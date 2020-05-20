@@ -50,7 +50,7 @@
         },
         methods : {
             save(){
-                console.log(this.checkedCat )
+                // console.log(this.checkedCat )
                 console.log(this.checked)
             }
         },

@@ -44,6 +44,7 @@
             >
                 <category-create-component
                     title="Создание категории"
+                    @close = "closeModal"
                 />
                 <template #footer>
                     <button-component
