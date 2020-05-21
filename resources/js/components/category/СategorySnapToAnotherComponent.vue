@@ -49,11 +49,18 @@
         },
         methods : {
             save(){
+
                 let checked = this.$store.getters.getCheckedCat
                 let categories = this.categories
-                checked = categories.findIndex(item=>item.id == checked)
+                let oldID = checked.id
+                let oldParentID = checked.parent_id
+                let oldCat = {
+                    id : oldID,
+                    parent_id : oldParentID
+                }
+                this.$store.dispatch('OLD_CATEGORY', oldCat)
+                checked = categories.findIndex(item=>item.id == oldID)
                 categories[checked].parent_id = this.checkID
-                this.$store.dispatch('LOAD_CATEGORIES', categories)
                 this.$emit('close')
             },
             checked(cat){

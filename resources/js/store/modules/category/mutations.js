@@ -3,6 +3,11 @@ export function LOAD_CATEGORIES(state, payload){
 
 }
 
+export function OLD_CATEGORY(state, payload){
+    state.oldCategory = payload
+
+}
+
 export function LOAD_CHECKED_CAT(state, payload){
     state.checkCatToSnap = payload
 }

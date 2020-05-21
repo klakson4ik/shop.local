@@ -1,7 +1,7 @@
 <template>
 
     <div class="container">
-        <div v-for="cat of cats" :key="cats.title">
+        <div v-for="cat of cats" :key="cats.id">
             <div v-if="cat.status==='active'">
                 <div class="row" >
                     <div class="col">
@@ -89,9 +89,7 @@
             }
         },
         created() {
-            this.cats[0].title = this.item.name
-            this.cats[0].status = 'active'
-            this.fillParentCats(this.item.parent_id)
+            this.editList()
         },
         methods : {
             fillParentCats(id){
@@ -111,16 +109,29 @@
             },
             save(){
                 this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true)
+            },
+            editList(){
+                console.log(this.item)
+                this.cats[0].title = this.item.name
+                this.cats[0].status = 'active'
+                this.fillParentCats(this.item.parent_id)
             }
 
         },
-        // mounted() {
-        //     this.$store.subscribe((mutation , getters) => {
-        //         if(mutation.type === 'LOAD_CATEGORIES'){
-        //             console.log(this.categories)
-        //         }
-        //     })
-        // }
+        mounted() {
+            this.$store.subscribe((mutation , getters) => {
+                if(mutation.type === 'OLD_CATEGORY'){
+                    this.cats  = [
+                        {
+                            title: "",
+                            status: "",
+                            id : ""
+                        }
+                    ]
+                    this.editList()
+                }
+            })
+        }
     }
 </script>
 

@@ -110,7 +110,7 @@
         },
         methods: {
             editItem(cat){
-                this.$store.dispatch('LOAD_CHECKED_CAT', cat.id)
+                this.$store.dispatch('LOAD_CHECKED_CAT', cat)
                 this.editValue = cat
             },
             deleteCat(){

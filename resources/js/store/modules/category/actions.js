@@ -3,6 +3,11 @@ export function LOAD_CATEGORIES(context, categories){
 
 }
 
+export function OLD_CATEGORY(context, oldCategory){
+    context.commit('OLD_CATEGORY', oldCategory)
+
+}
+
 export function LOAD_CHECKED_CAT(context, checkCatToSnap){
     context.commit('LOAD_CHECKED_CAT', checkCatToSnap)
 

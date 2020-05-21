@@ -383,9 +383,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.cats[0].title = this.item.name;
-    this.cats[0].status = 'active';
-    this.fillParentCats(this.item.parent_id);
+    this.editList();
   },
   methods: {
     fillParentCats: function fillParentCats(id) {
@@ -407,15 +405,29 @@ __webpack_require__.r(__webpack_exports__);
     },
     save: function save() {
       this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true);
+    },
+    editList: function editList() {
+      console.log(this.item);
+      this.cats[0].title = this.item.name;
+      this.cats[0].status = 'active';
+      this.fillParentCats(this.item.parent_id);
     }
-  } // mounted() {
-  //     this.$store.subscribe((mutation , getters) => {
-  //         if(mutation.type === 'LOAD_CATEGORIES'){
-  //             console.log(this.categories)
-  //         }
-  //     })
-  // }
+  },
+  mounted: function mounted() {
+    var _this = this;
 
+    this.$store.subscribe(function (mutation, getters) {
+      if (mutation.type === 'OLD_CATEGORY') {
+        _this.cats = [{
+          title: "",
+          status: "",
+          id: ""
+        }];
+
+        _this.editList();
+      }
+    });
+  }
 });
 
 /***/ }),
@@ -548,7 +560,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     editItem: function editItem(cat) {
-      this.$store.dispatch('LOAD_CHECKED_CAT', cat.id);
+      this.$store.dispatch('LOAD_CHECKED_CAT', cat);
       this.editValue = cat;
     },
     deleteCat: function deleteCat() {},
@@ -691,11 +703,17 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var checked = this.$store.getters.getCheckedCat;
       var categories = this.categories;
+      var oldID = checked.id;
+      var oldParentID = checked.parent_id;
+      var oldCat = {
+        id: oldID,
+        parent_id: oldParentID
+      };
+      this.$store.dispatch('OLD_CATEGORY', oldCat);
       checked = categories.findIndex(function (item) {
-        return item.id == checked;
+        return item.id == oldID;
       });
       categories[checked].parent_id = this.checkID;
-      this.$store.dispatch('LOAD_CATEGORIES', categories);
       this.$emit('close');
     },
     checked: function checked(cat) {
@@ -2213,7 +2231,7 @@ var render = function() {
     { staticClass: "container" },
     [
       _vm._l(_vm.cats, function(cat) {
-        return _c("div", { key: _vm.cats.title }, [
+        return _c("div", { key: _vm.cats.id }, [
           cat.status === "active"
             ? _c("div", [
                 _c("div", { staticClass: "row" }, [
@@ -17067,17 +17085,21 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/actions.js ***!
   \********************************************************/
-/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, OLD_CATEGORY, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OLD_CATEGORY", function() { return OLD_CATEGORY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(context, categories) {
   context.commit('LOAD_CATEGORIES', categories);
+}
+function OLD_CATEGORY(context, oldCategory) {
+  context.commit('OLD_CATEGORY', oldCategory);
 }
 function LOAD_CHECKED_CAT(context, checkCatToSnap) {
   context.commit('LOAD_CHECKED_CAT', checkCatToSnap);
@@ -17095,17 +17117,21 @@ function SNAP_TO_CATEGORY_STATUS(context, snapToCategoryStatus) {
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/getters.js ***!
   \********************************************************/
-/*! exports provided: getCategories, getCheckedCat, getCreatingSubCategoryStatus, getSnapToCategoryStatus */
+/*! exports provided: getCategories, getOldCategory, getCheckedCat, getCreatingSubCategoryStatus, getSnapToCategoryStatus */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCategories", function() { return getCategories; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOldCategory", function() { return getOldCategory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCheckedCat", function() { return getCheckedCat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCreatingSubCategoryStatus", function() { return getCreatingSubCategoryStatus; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSnapToCategoryStatus", function() { return getSnapToCategoryStatus; });
 function getCategories(state) {
   return state.categories;
+}
+function getOldCategory(state) {
+  return state.oldCategory;
 }
 function getCheckedCat(state) {
   return state.checkCatToSnap;
@@ -17149,17 +17175,21 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************!*\
   !*** ./resources/js/store/modules/category/mutations.js ***!
   \**********************************************************/
-/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, OLD_CATEGORY, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OLD_CATEGORY", function() { return OLD_CATEGORY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(state, payload) {
   state.categories = payload;
+}
+function OLD_CATEGORY(state, payload) {
+  state.oldCategory = payload;
 }
 function LOAD_CHECKED_CAT(state, payload) {
   state.checkCatToSnap = payload;
@@ -17184,6 +17214,7 @@ function SNAP_TO_CATEGORY_STATUS(state, payload) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   categories: [],
+  oldCategory: [],
   checkCatToSnap: '',
   creatingSubCategoryStatus: false,
   snapToCategoryStatus: false
