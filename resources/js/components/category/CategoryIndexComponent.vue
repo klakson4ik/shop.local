@@ -64,7 +64,6 @@
                 title = "Редактирование категории">
                 <category-edit-component
                     title="Редоктирование категорий"
-                    :item = "editValue"
                 />
                 <template #footer>
                     <button-component

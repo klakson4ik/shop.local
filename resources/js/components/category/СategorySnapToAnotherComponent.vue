@@ -58,9 +58,12 @@
                     id : oldID,
                     parent_id : oldParentID
                 }
-                this.$store.dispatch('OLD_CATEGORY', oldCat)
-                checked = categories.findIndex(item=>item.id == oldID)
+
+                checked.parent_id = this.checkID
+                // this.$store.dispatch('LOAD_CHECKED_CAT', checked)
+                // console.log(checked.parent_id)
                 categories[checked].parent_id = this.checkID
+
                 this.$emit('close')
             },
             checked(cat){

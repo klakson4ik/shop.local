@@ -366,7 +366,6 @@ __webpack_require__.r(__webpack_exports__);
     CategoryTemplatePopupComponent: _CategoryTemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     CategorySnapToAnotherComponent: _ategorySnapToAnotherComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  props: ['item'],
   data: function data() {
     return {
       modalVisible: false,
@@ -380,6 +379,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     categories: function categories() {
       return this.$store.getters.getCategories;
+    },
+    item: function item() {
+      return this.$store.getters.getCheckedCat;
     }
   },
   created: function created() {
@@ -407,6 +409,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true);
     },
     editList: function editList() {
+      // console.log(this.$store.getters.getCategories)
+      // console.log(this.$store.getters.getCheckedCat)
       console.log(this.item);
       this.cats[0].title = this.item.name;
       this.cats[0].status = 'active';
@@ -446,7 +450,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CategoryEditComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CategoryEditComponent */ "./resources/js/components/category/CategoryEditComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
 /* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table */ "./resources/js/components/category/table.js");
-//
 //
 //
 //
@@ -709,10 +712,9 @@ __webpack_require__.r(__webpack_exports__);
         id: oldID,
         parent_id: oldParentID
       };
-      this.$store.dispatch('OLD_CATEGORY', oldCat);
-      checked = categories.findIndex(function (item) {
-        return item.id == oldID;
-      });
+      checked.parent_id = this.checkID; // this.$store.dispatch('LOAD_CHECKED_CAT', checked)
+      // console.log(checked.parent_id)
+
       categories[checked].parent_id = this.checkID;
       this.$emit('close');
     },
@@ -2545,10 +2547,7 @@ var render = function() {
               },
               [
                 _c("category-edit-component", {
-                  attrs: {
-                    title: "Редоктирование категорий",
-                    item: _vm.editValue
-                  }
+                  attrs: { title: "Редоктирование категорий" }
                 })
               ],
               1

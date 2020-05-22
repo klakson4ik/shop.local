@@ -69,7 +69,6 @@
     export default {
         name: "CategoryEditComponent",
         components: {CategoryTemplatePopupComponent , CategorySnapToAnotherComponent},
-        props : ['item'],
         data: () => {
             return {
                 modalVisible : false,
@@ -86,7 +85,11 @@
         computed: {
             categories(){
                 return this.$store.getters.getCategories
+            },
+            item(){
+                return this.$store.getters.getCheckedCat
             }
+
         },
         created() {
             this.editList()
@@ -111,6 +114,8 @@
                 this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true)
             },
             editList(){
+                // console.log(this.$store.getters.getCategories)
+                // console.log(this.$store.getters.getCheckedCat)
                 console.log(this.item)
                 this.cats[0].title = this.item.name
                 this.cats[0].status = 'active'
