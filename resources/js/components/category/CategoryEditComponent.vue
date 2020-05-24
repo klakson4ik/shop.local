@@ -5,12 +5,18 @@
             <div v-if="cat.status==='active'">
                 <div class="row" >
                     <div class="col">
-                        <input type="text" class="p-1 mb-2 shadow form-control" :value="cat.title">
+                        <p class="border  shadow border-warning p-1 mb-2">{{cat.title}}</p>
                     </div>
                 </div>
                 <div class="row" >
                     <div class="col">
-                        <button type="button" class="btn btn-primary mt-4" @click="modalVisible=true">Привязать к другой категории</button>
+                        <input type="text" class="p-1 mb-2 shadow form-control border-warning" placeholder="Новое имя" v-model="editName">
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col">
+                        <button type="button" class=" btn btn-primary mt-4" @click="changeName">Изменить имя</button>
+                        <button type="button" class=" btn btn-primary mt-4" @click="modalVisible=true">Привязать к другой категории</button>
                     </div>
                 </div>
             </div>
@@ -43,7 +49,8 @@
                 title="Привязка категории"
             >
                 <category-snap-to-another-component
-                    @close="closeModal"
+                    @snap="snap"
+
                 />
                 <template #footer>
                     <button-component
@@ -72,6 +79,7 @@
         data: () => {
             return {
                 modalVisible : false,
+                editName : '',
                 cats : [
                     {
                         title: "",
@@ -97,7 +105,7 @@
         methods : {
             fillParentCats(id){
                 if(id != null) {
-                    let elemId = this.categories.findIndex(item=>item.id == id)
+                    let elemId = this.categories.findIndex(item=>item.id === id)
                     this.cats.unshift({
                         title: this.categories[elemId].title,
                         id: this.categories[elemId].id,
@@ -114,26 +122,61 @@
                 this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true)
             },
             editList(){
-                // console.log(this.$store.getters.getCategories)
-                // console.log(this.$store.getters.getCheckedCat)
-                console.log(this.item)
-                this.cats[0].title = this.item.name
+                this.cats[0].title = this.item.title
                 this.cats[0].status = 'active'
                 this.fillParentCats(this.item.parent_id)
+            },
+            snap(){
+                this.closeModal()
+                this.cats  = [
+                    {
+                        title: "",
+                        status: "",
+                        id : ""
+                    }
+                ]
+                this.editList()
+            },
+            changeName(){
+                this.item.title = this.editName
+                this.cats  = [
+                    {
+                        title: "",
+                        status: "",
+                        id : ""
+                    }
+                ]
+                this.editList()
+
+
+            },
+            saveCategory(){
+
+                let elemId = this.categories.findIndex(item=>item.id === this.item.id)
+                this.categories[elemId].title = this.item.title
+                fetch("category/" + this.item.id, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-CSRF-TOKEN" :  document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        title: "Edit category ",
+                        body: this.item
+                    })
+                })
+                //     .then(response => (response.json()))
+                //     // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
+                // this.$store.dispatch('EDITING_CATEGORY_STATUS', false)
+                this.$emit('saveEditCategory')
             }
 
         },
         mounted() {
             this.$store.subscribe((mutation , getters) => {
-                if(mutation.type === 'OLD_CATEGORY'){
-                    this.cats  = [
-                        {
-                            title: "",
-                            status: "",
-                            id : ""
-                        }
-                    ]
-                    this.editList()
+                if(mutation.type === 'EDITING_CATEGORY_STATUS' && getters.categoryModule.editingCategoryStatus === true){
+                    this.saveCategory()
                 }
             })
         }

@@ -16,12 +16,15 @@
             <tbody>
             <tr v-for="(cat, index) of items" :key="items.index">
                 <th scope="row">{{index+1}}</th>
-                <td class="d-flex justify-content-start">{{cat.name}}</td>
+                <td class="d-flex justify-content-start">{{cat.title}}</td>
                 <td>
                     <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>
                 </td>
                 <td>
                     <i class="fa fa-trash" aria-hidden="true" @click="deleteCat(cat)" ></i>
+                </td>
+                <td>
+                    <i class="fa fa-ban" aria-hidden="true"></i>
                 </td>
 
             </tr>
@@ -31,6 +34,7 @@
             <div class="row">
                 <div class="col d-flex justify-content-end">
                     <table-pagination-component
+                        ref ="reRender"
                         @fillCat = "fillCat"
                     />
                 </div>
@@ -44,16 +48,16 @@
             >
                 <category-create-component
                     title="Создание категории"
-                    @close = "closeModal"
+                    @close = "closeModalCreate"
                 />
                 <template #footer>
                     <button-component
                         btnName="Закрыть"
-                        @click="closeModal"
+                        @click="closeModalCreate"
                     />
                     <button-component
                         btnName="Создать категорию"
-                        @click="saveCategories"
+                        @click="saveCreateStatus"
                     />
                 </template>
             </category-template-popup-component>
@@ -63,16 +67,18 @@
             <category-template-popup-component
                 title = "Редактирование категории">
                 <category-edit-component
-                    title="Редоктирование категорий"
+                    title="Редактирование категорий"
+                    @close="closeModalEdit"
+                    @saveEditCategory="saveEditCategory"
                 />
                 <template #footer>
                     <button-component
-                        btnName="Закрыть"
-                        @click="closeModal"
+                        btnName="Отменить"
+                        @click="closeModalEdit"
                     />
                     <button-component
                         btnName="Сохранить"
-                        @click="saveCategories"
+                        @click="saveEditStatus"
                     />
                 </template>
             </category-template-popup-component>
@@ -94,12 +100,13 @@
     export default {
         name: "categoryIndexComponent",
         mixins : [tableMixin],
-        props: ['categories'],
+        props: ['categories', 'categoryNesting'],
         components: {categoryCreateComponent, CategoryTemplatePopupComponent, CategoryEditComponent, ButtonComponent },
         data: () => {
             return {
                 modalVisible : false,
-                editValue : '',
+                editCat : [],
+                canDelete : [],
                 modal : {
                     'create': false,
                     'edit': false,
@@ -110,29 +117,55 @@
         methods: {
             editItem(cat){
                 this.$store.dispatch('LOAD_CHECKED_CAT', cat)
-                this.editValue = cat
-            },
-            deleteCat(){
+                this.editCat.push({
+                    id: cat.id,
+                    parent_id: cat.parent_id
+                    })
 
+            },
+            deleteCat(cat){
+                console.log(this.categoryNesting)
             },
 
             showModal(act){
                 this.modalVisible = true
                 this.modal[act] = true
             },
-            closeModal(){
-                for (let each in this.modal){
-                    this.modal[each] = false
-                }
+            closeModalCreate(){
+                this.modal.create = false
                 this.modalVisible = false
             },
-            saveCategories(){
+            closeModalEdit(){
+                this.modal.edit = false
+                this.modalVisible = false
+                let elemID = this.categories.findIndex(item=>item.id === this.editCat[0].id)
+                this.categories[elemID].parent_id = this.editCat[0].parent_id
+                this.$refs['reRender'].splitArray()
+            },
+            saveEditCategory(){
+                this.modal.edit = false
+                this.modalVisible = false
+                this.$refs['reRender'].splitArray()
+            },
+            saveEditStatus(){
+                this.$store.dispatch('EDITING_CATEGORY_STATUS', true)
+            },
+            saveCreateStatus(){
                 this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', true)
+            },
+            compilationNesting(nest){
+                for (let item in nest) {
+                    if (!nest[item]['children'])
+                        this.canDelete.push(nest[item]['id'])
+                    else
+                        this.compilationNesting(nest[item]['children'])
+                }
             }
 
         },
         created() {
             this.$store.dispatch('LOAD_CATEGORIES', this.categories)
+            this.compilationNesting(this.categoryNesting)
         }
     }
 </script>
