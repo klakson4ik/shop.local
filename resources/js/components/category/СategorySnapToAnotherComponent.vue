@@ -63,7 +63,7 @@
                 // this.$store.dispatch('LOAD_CHECKED_CAT', checked)
                 // console.log(checked.parent_id)
                 categories[checked].parent_id = this.checkID
-
+                console.log('dffdfdfdff')
                 this.$emit('close')
             },
             checked(cat){

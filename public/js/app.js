@@ -716,6 +716,7 @@ __webpack_require__.r(__webpack_exports__);
       // console.log(checked.parent_id)
 
       categories[checked].parent_id = this.checkID;
+      console.log('dffdfdfdff');
       this.$emit('close');
     },
     checked: function checked(cat) {
