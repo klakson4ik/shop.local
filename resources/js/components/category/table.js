@@ -12,7 +12,7 @@ export default {
             this.items = [];
             for (let cat of array) {
                 this.items.push({
-                        name: cat.title,
+                        title: cat.title,
                         id: cat.id,
                         parent_id: cat.parent_id
                     }

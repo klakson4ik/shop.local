@@ -358,6 +358,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -369,6 +376,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       modalVisible: false,
+      editName: '',
       cats: [{
         title: "",
         status: "",
@@ -391,7 +399,7 @@ __webpack_require__.r(__webpack_exports__);
     fillParentCats: function fillParentCats(id) {
       if (id != null) {
         var elemId = this.categories.findIndex(function (item) {
-          return item.id == id;
+          return item.id === id;
         });
         this.cats.unshift({
           title: this.categories[elemId].title,
@@ -409,26 +417,59 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch('SNAP_TO_CATEGORY_STATUS', true);
     },
     editList: function editList() {
-      // console.log(this.$store.getters.getCategories)
-      // console.log(this.$store.getters.getCheckedCat)
-      console.log(this.item);
-      this.cats[0].title = this.item.name;
+      this.cats[0].title = this.item.title;
       this.cats[0].status = 'active';
       this.fillParentCats(this.item.parent_id);
+    },
+    snap: function snap() {
+      this.closeModal();
+      this.cats = [{
+        title: "",
+        status: "",
+        id: ""
+      }];
+      this.editList();
+    },
+    changeName: function changeName() {
+      this.item.title = this.editName;
+      this.cats = [{
+        title: "",
+        status: "",
+        id: ""
+      }];
+      this.editList();
+    },
+    saveCategory: function saveCategory() {
+      var _this = this;
+
+      var elemId = this.categories.findIndex(function (item) {
+        return item.id === _this.item.id;
+      });
+      this.categories[elemId].title = this.item.title;
+      fetch("category/" + this.item.id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text-plain, */*",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          title: "Edit category ",
+          body: this.item
+        })
+      }); //     .then(response => (response.json()))
+      //     // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
+      // this.$store.dispatch('EDITING_CATEGORY_STATUS', false)
+
+      this.$emit('saveEditCategory');
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     this.$store.subscribe(function (mutation, getters) {
-      if (mutation.type === 'OLD_CATEGORY') {
-        _this.cats = [{
-          title: "",
-          status: "",
-          id: ""
-        }];
-
-        _this.editList();
+      if (mutation.type === 'EDITING_CATEGORY_STATUS' && getters.categoryModule.editingCategoryStatus === true) {
+        _this2.saveCategory();
       }
     });
   }
@@ -535,6 +576,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -543,7 +590,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "categoryIndexComponent",
   mixins: [_table__WEBPACK_IMPORTED_MODULE_4__["default"]],
-  props: ['categories'],
+  props: ['categories', 'categoryNesting'],
   components: {
     categoryCreateComponent: _CategoryCreateComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     CategoryTemplatePopupComponent: _CategoryTemplatePopupComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -553,7 +600,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       modalVisible: false,
-      editValue: '',
+      editCat: [],
+      canDelete: [],
       modal: {
         'create': false,
         'edit': false,
@@ -564,26 +612,53 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     editItem: function editItem(cat) {
       this.$store.dispatch('LOAD_CHECKED_CAT', cat);
-      this.editValue = cat;
+      this.editCat.push({
+        id: cat.id,
+        parent_id: cat.parent_id
+      });
     },
-    deleteCat: function deleteCat() {},
+    deleteCat: function deleteCat(cat) {
+      console.log(this.categoryNesting);
+    },
     showModal: function showModal(act) {
       this.modalVisible = true;
       this.modal[act] = true;
     },
-    closeModal: function closeModal() {
-      for (var each in this.modal) {
-        this.modal[each] = false;
-      }
-
+    closeModalCreate: function closeModalCreate() {
+      this.modal.create = false;
       this.modalVisible = false;
     },
-    saveCategories: function saveCategories() {
+    closeModalEdit: function closeModalEdit() {
+      var _this = this;
+
+      this.modal.edit = false;
+      this.modalVisible = false;
+      var elemID = this.categories.findIndex(function (item) {
+        return item.id === _this.editCat[0].id;
+      });
+      this.categories[elemID].parent_id = this.editCat[0].parent_id;
+      this.$refs['reRender'].splitArray();
+    },
+    saveEditCategory: function saveEditCategory() {
+      this.modal.edit = false;
+      this.modalVisible = false;
+      this.$refs['reRender'].splitArray();
+    },
+    saveEditStatus: function saveEditStatus() {
+      this.$store.dispatch('EDITING_CATEGORY_STATUS', true);
+    },
+    saveCreateStatus: function saveCreateStatus() {
       this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', true);
+    },
+    compilationNesting: function compilationNesting(nest) {
+      for (var item in nest) {
+        if (!nest[item]['children']) this.canDelete.push(nest[item]['id']);else this.compilationNesting(nest[item]['children']);
+      }
     }
   },
   created: function created() {
     this.$store.dispatch('LOAD_CATEGORIES', this.categories);
+    this.compilationNesting(this.categoryNesting);
   }
 });
 
@@ -694,7 +769,11 @@ __webpack_require__.r(__webpack_exports__);
   mixins: [_table__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
-      checkID: ''
+      checkID: '',
+      editCat: {
+        id: '',
+        parent_id: ''
+      }
     };
   },
   computed: {
@@ -705,6 +784,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     save: function save() {
       var checked = this.$store.getters.getCheckedCat;
+<<<<<<< HEAD
       var categories = this.categories;
       var oldID = checked.id;
       var oldParentID = checked.parent_id;
@@ -718,8 +798,16 @@ __webpack_require__.r(__webpack_exports__);
       categories[checked].parent_id = this.checkID;
       console.log('dffdfdfdff');
       this.$emit('close');
+=======
+      checked.parent_id = this.checkID;
+      var elemID = this.categories.findIndex(function (item) {
+        return item.id === checked.id;
+      });
+      this.categories[elemID].parent_id = this.checkID;
+      this.$emit('snap');
+>>>>>>> a49942ae5568bb81faefea5d0b2357d63d9e886c
     },
-    checked: function checked(cat) {
+    check: function check(cat) {
       this.checkID = cat.id;
     }
   },
@@ -731,6 +819,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.save();
       }
     });
+  },
+  created: function created() {
+    var cat = this.$store.getters.getCheckedCat;
+    this.editCat = {
+      id: cat.id,
+      parent_id: cat.parent_id
+    };
   }
 });
 
@@ -2239,10 +2334,37 @@ var render = function() {
             ? _c("div", [
                 _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col" }, [
+                    _c(
+                      "p",
+                      { staticClass: "border  shadow border-warning p-1 mb-2" },
+                      [_vm._v(_vm._s(cat.title))]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col" }, [
                     _c("input", {
-                      staticClass: "p-1 mb-2 shadow form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: cat.title }
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editName,
+                          expression: "editName"
+                        }
+                      ],
+                      staticClass:
+                        "p-1 mb-2 shadow form-control border-warning",
+                      attrs: { type: "text", placeholder: "Новое имя" },
+                      domProps: { value: _vm.editName },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.editName = $event.target.value
+                        }
+                      }
                     })
                   ])
                 ]),
@@ -2252,7 +2374,17 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-primary mt-4",
+                        staticClass: " btn btn-primary mt-4",
+                        attrs: { type: "button" },
+                        on: { click: _vm.changeName }
+                      },
+                      [_vm._v("Изменить имя")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: " btn btn-primary mt-4",
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
@@ -2320,7 +2452,7 @@ var render = function() {
                 },
                 [
                   _c("category-snap-to-another-component", {
-                    on: { close: _vm.closeModal }
+                    on: { snap: _vm.snap }
                   })
                 ],
                 1
@@ -2424,7 +2556,7 @@ var render = function() {
             _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(index + 1))]),
             _vm._v(" "),
             _c("td", { staticClass: "d-flex justify-content-start" }, [
-              _vm._v(_vm._s(cat.name))
+              _vm._v(_vm._s(cat.title))
             ]),
             _vm._v(" "),
             _c("td", [
@@ -2449,7 +2581,9 @@ var render = function() {
                   }
                 }
               })
-            ])
+            ]),
+            _vm._v(" "),
+            _vm._m(1, true)
           ])
         }),
         0
@@ -2461,7 +2595,12 @@ var render = function() {
         _c(
           "div",
           { staticClass: "col d-flex justify-content-end" },
-          [_c("table-pagination-component", { on: { fillCat: _vm.fillCat } })],
+          [
+            _c("table-pagination-component", {
+              ref: "reRender",
+              on: { fillCat: _vm.fillCat }
+            })
+          ],
           1
         )
       ])
@@ -2483,12 +2622,12 @@ var render = function() {
                         return [
                           _c("button-component", {
                             attrs: { btnName: "Закрыть" },
-                            on: { click: _vm.closeModal }
+                            on: { click: _vm.closeModalCreate }
                           }),
                           _vm._v(" "),
                           _c("button-component", {
                             attrs: { btnName: "Создать категорию" },
-                            on: { click: _vm.saveCategories }
+                            on: { click: _vm.saveCreateStatus }
                           })
                         ]
                       },
@@ -2497,13 +2636,13 @@ var render = function() {
                   ],
                   null,
                   false,
-                  570710126
+                  2079788012
                 )
               },
               [
                 _c("category-create-component", {
                   attrs: { title: "Создание категории" },
-                  on: { close: _vm.closeModal }
+                  on: { close: _vm.closeModalCreate }
                 })
               ],
               1
@@ -2528,13 +2667,13 @@ var render = function() {
                       fn: function() {
                         return [
                           _c("button-component", {
-                            attrs: { btnName: "Закрыть" },
-                            on: { click: _vm.closeModal }
+                            attrs: { btnName: "Отменить" },
+                            on: { click: _vm.closeModalEdit }
                           }),
                           _vm._v(" "),
                           _c("button-component", {
                             attrs: { btnName: "Сохранить" },
-                            on: { click: _vm.saveCategories }
+                            on: { click: _vm.saveEditStatus }
                           })
                         ]
                       },
@@ -2543,12 +2682,16 @@ var render = function() {
                   ],
                   null,
                   false,
-                  3846568011
+                  2546735215
                 )
               },
               [
                 _c("category-edit-component", {
-                  attrs: { title: "Редоктирование категорий" }
+                  attrs: { title: "Редактирование категорий" },
+                  on: {
+                    close: _vm.closeModalEdit,
+                    saveEditCategory: _vm.saveEditCategory
+                  }
                 })
               ],
               1
@@ -2572,6 +2715,14 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Действие")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("i", { staticClass: "fa fa-ban", attrs: { "aria-hidden": "true" } })
     ])
   }
 ]
@@ -2655,15 +2806,21 @@ var render = function() {
           return _c("tr", { key: _vm.items.index }, [
             _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(index + 1))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(cat.name))]),
+            _c("td", [_vm._v(_vm._s(cat.title))]),
             _vm._v(" "),
             _c("td", [
               _c("input", {
                 staticClass: "ml-4 shadow",
-                attrs: { type: "radio", name: "snap" },
+                attrs: {
+                  type: "radio",
+                  name: "snap",
+                  disabled:
+                    _vm.editCat.id === cat.id ||
+                    _vm.editCat.parent_id === cat.id
+                },
                 on: {
                   change: function($event) {
-                    return _vm.checked(cat)
+                    return _vm.check(cat)
                   }
                 }
               })
@@ -16789,7 +16946,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var cat = _step.value;
           this.items.push({
-            name: cat.title,
+            title: cat.title,
             id: cat.id,
             parent_id: cat.parent_id
           });
@@ -17085,27 +17242,27 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/actions.js ***!
   \********************************************************/
-/*! exports provided: LOAD_CATEGORIES, OLD_CATEGORY, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, EDITING_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OLD_CATEGORY", function() { return OLD_CATEGORY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDITING_CATEGORY_STATUS", function() { return EDITING_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(context, categories) {
   context.commit('LOAD_CATEGORIES', categories);
-}
-function OLD_CATEGORY(context, oldCategory) {
-  context.commit('OLD_CATEGORY', oldCategory);
 }
 function LOAD_CHECKED_CAT(context, checkCatToSnap) {
   context.commit('LOAD_CHECKED_CAT', checkCatToSnap);
 }
 function CREATING_SUB_CATEGORY_STATUS(context, creatingSubCategoryStatus) {
   context.commit('CREATING_SUB_CATEGORY_STATUS', creatingSubCategoryStatus);
+}
+function EDITING_CATEGORY_STATUS(context, editingCategoryStatus) {
+  context.commit('EDITING_CATEGORY_STATUS', editingCategoryStatus);
 }
 function SNAP_TO_CATEGORY_STATUS(context, snapToCategoryStatus) {
   context.commit('SNAP_TO_CATEGORY_STATUS', snapToCategoryStatus);
@@ -17117,27 +17274,27 @@ function SNAP_TO_CATEGORY_STATUS(context, snapToCategoryStatus) {
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/getters.js ***!
   \********************************************************/
-/*! exports provided: getCategories, getOldCategory, getCheckedCat, getCreatingSubCategoryStatus, getSnapToCategoryStatus */
+/*! exports provided: getCategories, getCheckedCat, getCreatingSubCategoryStatus, getEditingCategoryStatus, getSnapToCategoryStatus */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCategories", function() { return getCategories; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOldCategory", function() { return getOldCategory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCheckedCat", function() { return getCheckedCat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCreatingSubCategoryStatus", function() { return getCreatingSubCategoryStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEditingCategoryStatus", function() { return getEditingCategoryStatus; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSnapToCategoryStatus", function() { return getSnapToCategoryStatus; });
 function getCategories(state) {
   return state.categories;
-}
-function getOldCategory(state) {
-  return state.oldCategory;
 }
 function getCheckedCat(state) {
   return state.checkCatToSnap;
 }
 function getCreatingSubCategoryStatus(state) {
   return state.creatingSubCategoryStatus;
+}
+function getEditingCategoryStatus(state) {
+  return state.editingCategoryStatus;
 }
 function getSnapToCategoryStatus(state) {
   return state.snapToCategoryStatus;
@@ -17175,27 +17332,27 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************!*\
   !*** ./resources/js/store/modules/category/mutations.js ***!
   \**********************************************************/
-/*! exports provided: LOAD_CATEGORIES, OLD_CATEGORY, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, EDITING_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OLD_CATEGORY", function() { return OLD_CATEGORY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDITING_CATEGORY_STATUS", function() { return EDITING_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(state, payload) {
   state.categories = payload;
-}
-function OLD_CATEGORY(state, payload) {
-  state.oldCategory = payload;
 }
 function LOAD_CHECKED_CAT(state, payload) {
   state.checkCatToSnap = payload;
 }
 function CREATING_SUB_CATEGORY_STATUS(state, payload) {
   state.creatingSubCategoryStatus = payload;
+}
+function EDITING_CATEGORY_STATUS(state, payload) {
+  state.editingCategoryStatus = payload;
 }
 function SNAP_TO_CATEGORY_STATUS(state, payload) {
   state.snapToCategoryStatus = payload;
@@ -17214,9 +17371,9 @@ function SNAP_TO_CATEGORY_STATUS(state, payload) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   categories: [],
-  oldCategory: [],
   checkCatToSnap: '',
   creatingSubCategoryStatus: false,
+  editingCategoryStatus: false,
   snapToCategoryStatus: false
 });
 

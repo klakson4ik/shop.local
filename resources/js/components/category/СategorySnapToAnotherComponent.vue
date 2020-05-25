@@ -11,8 +11,8 @@
             <tbody>
             <tr v-for="(cat, index) of items" :key="items.index">
                 <th scope="row">{{index+1}}</th>
-                <td>{{cat.name}}</td>
-                <td><input type="radio" name="snap" class="ml-4 shadow"  @change = "checked(cat)">
+                <td>{{cat.title}}</td>
+                <td><input type="radio" name="snap" class="ml-4 shadow"  @change = "check(cat)" :disabled="editCat.id === cat.id || editCat.parent_id === cat.id">
                 </td>
 
             </tr>
@@ -39,7 +39,11 @@
         mixins : [tableMixin],
         data: () => {
             return {
-                checkID: ''
+                checkID: '',
+                editCat : {
+                    id : '',
+                    parent_id : ''
+                }
             }
         },
         computed: {
@@ -51,22 +55,21 @@
             save(){
 
                 let checked = this.$store.getters.getCheckedCat
-                let categories = this.categories
-                let oldID = checked.id
-                let oldParentID = checked.parent_id
-                let oldCat = {
-                    id : oldID,
-                    parent_id : oldParentID
-                }
-
                 checked.parent_id = this.checkID
+<<<<<<< HEAD
                 // this.$store.dispatch('LOAD_CHECKED_CAT', checked)
                 // console.log(checked.parent_id)
                 categories[checked].parent_id = this.checkID
                 console.log('dffdfdfdff')
                 this.$emit('close')
+=======
+                let elemID = this.categories.findIndex(item=>item.id === checked.id)
+                this.categories[elemID].parent_id = this.checkID
+                this.$emit('snap')
+
+>>>>>>> a49942ae5568bb81faefea5d0b2357d63d9e886c
             },
-            checked(cat){
+            check(cat){
                 this.checkID= cat.id
             }
         },
@@ -76,6 +79,13 @@
                     this.save()
                 }
             })
+        },
+        created() {
+            let cat = this.$store.getters.getCheckedCat
+            this.editCat = {
+                id : cat.id,
+                parent_id : cat.parent_id
+            }
         }
     }
 </script>

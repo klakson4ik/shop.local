@@ -18,9 +18,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $categoryNesting = CategoryNesting::getTree();
 
         return response()->view('pages.category.index', [
-            'categories' => Category::get()
+            'categories' => Category::get(),
+            'categoryNesting' => $categoryNesting
         ]);
 
 
@@ -94,7 +96,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $categoryTree = CategoryNesting::getTree();
+        $alias = str_replace(' ', '-',mb_strtolower($request['body']['title']));
+        $body = $request['body'];
+        $body['alias'] = $alias;
+        $category->update($body);
+
     }
 
     /**

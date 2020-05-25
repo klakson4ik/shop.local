@@ -71,22 +71,22 @@ initial-build:
 # run all containers
 .PHONY: up
 up:
-	cd $(LARADOCK) && docker-compose up -d $(LIST_OF_CONTAINERS_TO_RUN) 
+	cd $(LARADOCK) && docker-compose up -d $(LIST_OF_CONTAINERS_TO_RUN)
 
 # stop all containers
 .PHONY: down
 down:
 	cd $(LARADOCK) && docker-compose down
-	
+
 .PHONY: start-portainer
 upp:
 	cd $(LARADOCK) && docker-compose up -d portainer
-	
+
 .PHONY: stop-portainer
 downp:
 	cd $(LARADOCK) && docker-compose down portainer
-	
-	
+
+
 
 # show laravel's log in realtime
 .PHONY: log
@@ -112,8 +112,8 @@ jphp:
 jdb:
 	cd $(LARADOCK) && docker exec -it $(DB_CONTAINER_NAME) mysql -u maks -p
 
-			
-	
+
+
 #------------------
 
 # javascript related targets
@@ -189,3 +189,11 @@ up-ngrok:
 .PHONY: chown
 chown:
 	sudo chown maks:maks -R ./
+
+.PHONY: git push
+push:
+	git push origin master
+
+.PHONY: git pull
+pull:
+	git pull origin master
