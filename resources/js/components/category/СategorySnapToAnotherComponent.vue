@@ -56,18 +56,10 @@
 
                 let checked = this.$store.getters.getCheckedCat
                 checked.parent_id = this.checkID
-<<<<<<< HEAD
-                // this.$store.dispatch('LOAD_CHECKED_CAT', checked)
-                // console.log(checked.parent_id)
-                categories[checked].parent_id = this.checkID
-                console.log('dffdfdfdff')
-                this.$emit('close')
-=======
                 let elemID = this.categories.findIndex(item=>item.id === checked.id)
                 this.categories[elemID].parent_id = this.checkID
                 this.$emit('snap')
 
->>>>>>> a49942ae5568bb81faefea5d0b2357d63d9e886c
             },
             check(cat){
                 this.checkID= cat.id

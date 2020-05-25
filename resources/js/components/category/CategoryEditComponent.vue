@@ -166,9 +166,6 @@
                         body: this.item
                     })
                 })
-                //     .then(response => (response.json()))
-                //     // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
-                // this.$store.dispatch('EDITING_CATEGORY_STATUS', false)
                 this.$emit('saveEditCategory')
             }
 

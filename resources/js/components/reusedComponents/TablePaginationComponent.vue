@@ -29,6 +29,7 @@
     export default {
         name: "tablePaginationComponent",
         component : {DropdownComponent},
+        props : ['array'],
         data : () => {
             return {
                 start : 0,
@@ -41,7 +42,7 @@
         },
         computed: {
             categories(){
-                return this.$store.getters.getCategories
+                return this.$store.getters[this.props.array]
             }
         },
         methods : {

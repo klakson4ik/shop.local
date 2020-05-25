@@ -14,4 +14,5 @@ Vue.component('category-snap-to-another-component', require('./components/catego
 Vue.component('table-pagination-component', require('./components/reusedComponents/TablePaginationComponent.vue').default)
 Vue.component('dropdown-component', require('./components/reusedComponents/DropdownComponent.vue').default)
 Vue.component('button-component', require('./components/reusedComponents/ButtonComponent.vue').default)
+Vue.component('search-component', require('./components/reusedComponents/SearchComponent.vue').default)
 

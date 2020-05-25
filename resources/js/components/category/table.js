@@ -1,7 +1,8 @@
 import TablePaginationComponent from "../reusedComponents/TablePaginationComponent";
+import SearchComponent from "../reusedComponents/SearchComponent";
 
 export default {
-    component :{TablePaginationComponent},
+    component :{TablePaginationComponent, SearchComponent},
     data() {
         return {
             items : []

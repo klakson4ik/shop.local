@@ -4,6 +4,9 @@
             <div class="col">
                 <button type="button" class="btn btn-primary" @click="showModal('create')">Добавить категорию</button>
             </div>
+            <div class="col">
+                <search-component/>
+            </div>
         </div>
         <table class="table table-striped">
             <thead>
@@ -20,10 +23,10 @@
                 <td>
                     <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>
                 </td>
-                <td>
+                <td v-if="canDelete.includes(cat.id)">
                     <i class="fa fa-trash" aria-hidden="true" @click="deleteCat(cat)" ></i>
                 </td>
-                <td>
+                <td v-else>
                     <i class="fa fa-ban" aria-hidden="true"></i>
                 </td>
 
@@ -124,7 +127,22 @@
 
             },
             deleteCat(cat){
-                console.log(this.categoryNesting)
+                let act = confirm('Точно удалить ' + cat.title)
+                if(act) {
+                    fetch("category/" + cat.id, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json, text-plain, */*",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                    })
+                    let elemID = this.categories.findIndex(item=>item.id === cat.id)
+                    delete this.categories[elemID]
+                    this.$refs['reRender'].splitArray()
+                }
+                else
+                    return false
             },
 
             showModal(act){
