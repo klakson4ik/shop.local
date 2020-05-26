@@ -29,7 +29,6 @@
     export default {
         name: "tablePaginationComponent",
         component : {DropdownComponent},
-        props : ['array'],
         data : () => {
             return {
                 start : 0,
@@ -41,13 +40,22 @@
 
         },
         computed: {
-            categories(){
-                return this.$store.getters[this.props.array]
+            array(){
+                return this.$store.getters.getArray
             }
         },
         methods : {
             splitArray(){
-                let arr = this.categories.slice(this.start, this.end)
+                let arr = this.array.slice(this.start, this.end)
+                this.$emit('fillCat', arr)
+            },
+
+            searchingSplitArray(){
+                this.start = 0
+                this.end = this.start + this.perPage
+                this.pass = (Math.ceil(this.array.length/10)*10)/this.perPage
+                this.count = 1
+                let arr = this.array.slice(this.start, this.end)
                 this.$emit('fillCat', arr)
             },
             nextPage(){
@@ -89,8 +97,8 @@
                 let prevCount = this.count * 100 / this.pass / 100;
                 this.perPage = value
 
-                this.pass = Math.ceil(this.categories.length / this.perPage)
-                this.count = Math.ceil((this.categories.length / this.perPage) * prevCount)
+                this.pass = Math.ceil(this.array.length / this.perPage)
+                this.count = Math.ceil((this.array.length / this.perPage) * prevCount)
                 if (this.count === 1){
                     this.start = 0
                     this.end = this.start + this.perPage
@@ -103,7 +111,7 @@
             }
         },
         created(){
-            this.pass = (Math.ceil(this.categories.length/10)*10)/this.perPage
+            this.pass = (Math.ceil(this.array.length/10)*10)/this.perPage
             this.splitArray()
         }
     }

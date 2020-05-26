@@ -2,10 +2,6 @@ export function LOAD_CATEGORIES(context, categories){
     context.commit('LOAD_CATEGORIES', categories)
 
 }
-export function SEARCHING_QUERY(context, searchingQuery){
-    context.commit('SEARCHING_QUERY', searchingQuery)
-
-}
 
 export function LOAD_CHECKED_CAT(context, checkCatToSnap){
     context.commit('LOAD_CHECKED_CAT', checkCatToSnap)

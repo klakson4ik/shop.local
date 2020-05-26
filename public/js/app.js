@@ -488,6 +488,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CategoryEditComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CategoryEditComponent */ "./resources/js/components/category/CategoryEditComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
 /* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table */ "./resources/js/components/category/table.js");
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -609,7 +615,41 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  computed: {},
   methods: {
+    getArrayPagination: function getArrayPagination() {
+      if (this.$store.getters.getSearchingQuery !== 0) {
+        var pattern = this.$store.getters.getSearchingQuery;
+
+        if (pattern.trim()) {
+          var array = [];
+
+          var _iterator = _createForOfIteratorHelper(this.categories),
+              _step;
+
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var item = _step.value;
+              var regexp = new RegExp(pattern.trim(), 'i');
+
+              if (regexp.test(item.title)) {
+                array.push(item);
+              }
+            }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
+
+          this.$store.dispatch('LOAD_ARRAY', array);
+          this.$refs['reRender'].searchingSplitArray();
+        }
+      } else {
+        this.$store.dispatch('LOAD_ARRAY', this.categories);
+        this.$refs['reRender'].splitArray();
+      }
+    },
     editItem: function editItem(cat) {
       this.$store.dispatch('LOAD_CHECKED_CAT', cat);
       this.editCat.push({
@@ -672,8 +712,18 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    this.$store.subscribe(function (mutation) {
+      if (mutation.type === 'SEARCHING_QUERY') {
+        _this2.getArrayPagination();
+      }
+    });
+  },
   created: function created() {
     this.$store.dispatch('LOAD_CATEGORIES', this.categories);
+    this.$store.dispatch('LOAD_ARRAY', this.categories);
     this.compilationNesting(this.categoryNesting);
   }
 });
@@ -924,14 +974,14 @@ __webpack_require__.r(__webpack_exports__);
       pattern: ''
     };
   },
-  computed: {
-    searching: function searching() {
-      return this.$store.getters.getSearchingQuery;
-    }
-  },
+  // computed: {
+  //     searching() {
+  //         return this.$store.getters.getSearchingQuery
+  //     }
+  // },
   watch: {
     pattern: function pattern(val) {
-      this.searching = val;
+      this.$store.dispatch('SEARCHING_QUERY', val);
     }
   }
 });
@@ -978,7 +1028,6 @@ __webpack_require__.r(__webpack_exports__);
   component: {
     DropdownComponent: _DropdownComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['array'],
   data: function data() {
     return {
       start: 0,
@@ -989,13 +1038,21 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    categories: function categories() {
-      return this.$store.getters[this.props.array];
+    array: function array() {
+      return this.$store.getters.getArray;
     }
   },
   methods: {
     splitArray: function splitArray() {
-      var arr = this.categories.slice(this.start, this.end);
+      var arr = this.array.slice(this.start, this.end);
+      this.$emit('fillCat', arr);
+    },
+    searchingSplitArray: function searchingSplitArray() {
+      this.start = 0;
+      this.end = this.start + this.perPage;
+      this.pass = Math.ceil(this.array.length / 10) * 10 / this.perPage;
+      this.count = 1;
+      var arr = this.array.slice(this.start, this.end);
       this.$emit('fillCat', arr);
     },
     nextPage: function nextPage() {
@@ -1039,8 +1096,8 @@ __webpack_require__.r(__webpack_exports__);
     getPerPage: function getPerPage(value) {
       var prevCount = this.count * 100 / this.pass / 100;
       this.perPage = value;
-      this.pass = Math.ceil(this.categories.length / this.perPage);
-      this.count = Math.ceil(this.categories.length / this.perPage * prevCount);
+      this.pass = Math.ceil(this.array.length / this.perPage);
+      this.count = Math.ceil(this.array.length / this.perPage * prevCount);
 
       if (this.count === 1) {
         this.start = 0;
@@ -1054,7 +1111,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.pass = Math.ceil(this.categories.length / 10) * 10 / this.perPage;
+    this.pass = Math.ceil(this.array.length / 10) * 10 / this.perPage;
     this.splitArray();
   }
 });
@@ -17420,22 +17477,18 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/actions.js ***!
   \********************************************************/
-/*! exports provided: LOAD_CATEGORIES, SEARCHING_QUERY, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, EDITING_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, EDITING_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEARCHING_QUERY", function() { return SEARCHING_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDITING_CATEGORY_STATUS", function() { return EDITING_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(context, categories) {
   context.commit('LOAD_CATEGORIES', categories);
-}
-function SEARCHING_QUERY(context, searchingQuery) {
-  context.commit('SEARCHING_QUERY', searchingQuery);
 }
 function LOAD_CHECKED_CAT(context, checkCatToSnap) {
   context.commit('LOAD_CHECKED_CAT', checkCatToSnap);
@@ -17456,22 +17509,18 @@ function SNAP_TO_CATEGORY_STATUS(context, snapToCategoryStatus) {
 /*!********************************************************!*\
   !*** ./resources/js/store/modules/category/getters.js ***!
   \********************************************************/
-/*! exports provided: getCategories, getSearchingQuery, getCheckedCat, getCreatingSubCategoryStatus, getEditingCategoryStatus, getSnapToCategoryStatus */
+/*! exports provided: getCategories, getCheckedCat, getCreatingSubCategoryStatus, getEditingCategoryStatus, getSnapToCategoryStatus */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCategories", function() { return getCategories; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSearchingQuery", function() { return getSearchingQuery; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCheckedCat", function() { return getCheckedCat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCreatingSubCategoryStatus", function() { return getCreatingSubCategoryStatus; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEditingCategoryStatus", function() { return getEditingCategoryStatus; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSnapToCategoryStatus", function() { return getSnapToCategoryStatus; });
 function getCategories(state) {
   return state.categories;
-}
-function getSearchingQuery(state) {
-  return state.searchingQuery;
 }
 function getCheckedCat(state) {
   return state.checkCatToSnap;
@@ -17518,22 +17567,18 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************!*\
   !*** ./resources/js/store/modules/category/mutations.js ***!
   \**********************************************************/
-/*! exports provided: LOAD_CATEGORIES, SEARCHING_QUERY, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, EDITING_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
+/*! exports provided: LOAD_CATEGORIES, LOAD_CHECKED_CAT, CREATING_SUB_CATEGORY_STATUS, EDITING_CATEGORY_STATUS, SNAP_TO_CATEGORY_STATUS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CATEGORIES", function() { return LOAD_CATEGORIES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEARCHING_QUERY", function() { return SEARCHING_QUERY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_CHECKED_CAT", function() { return LOAD_CHECKED_CAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_SUB_CATEGORY_STATUS", function() { return CREATING_SUB_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDITING_CATEGORY_STATUS", function() { return EDITING_CATEGORY_STATUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNAP_TO_CATEGORY_STATUS", function() { return SNAP_TO_CATEGORY_STATUS; });
 function LOAD_CATEGORIES(state, payload) {
   state.categories = payload;
-}
-function SEARCHING_QUERY(state, payload) {
-  state.searhingQuery = payload;
 }
 function LOAD_CHECKED_CAT(state, payload) {
   state.checkCatToSnap = payload;
@@ -17561,11 +17606,112 @@ function SNAP_TO_CATEGORY_STATUS(state, payload) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   categories: [],
-  searchingQuery: [],
   checkCatToSnap: '',
   creatingSubCategoryStatus: false,
   editingCategoryStatus: false,
   snapToCategoryStatus: false
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/reusedComponent/actions.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/store/modules/reusedComponent/actions.js ***!
+  \***************************************************************/
+/*! exports provided: LOAD_ARRAY, SEARCHING_QUERY */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_ARRAY", function() { return LOAD_ARRAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEARCHING_QUERY", function() { return SEARCHING_QUERY; });
+function LOAD_ARRAY(context, array) {
+  context.commit('LOAD_ARRAY', array);
+}
+function SEARCHING_QUERY(context, searchingQuery) {
+  context.commit('SEARCHING_QUERY', searchingQuery);
+}
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/reusedComponent/getters.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/store/modules/reusedComponent/getters.js ***!
+  \***************************************************************/
+/*! exports provided: getArray, getSearchingQuery */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getArray", function() { return getArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSearchingQuery", function() { return getSearchingQuery; });
+function getArray(state) {
+  return state.array;
+}
+function getSearchingQuery(state) {
+  return state.searchingQuery;
+}
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/reusedComponent/index.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/store/modules/reusedComponent/index.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./resources/js/store/modules/reusedComponent/state.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./actions */ "./resources/js/store/modules/reusedComponent/actions.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./resources/js/store/modules/reusedComponent/mutations.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./getters */ "./resources/js/store/modules/reusedComponent/getters.js");
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_1__,
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__,
+  getters: _getters__WEBPACK_IMPORTED_MODULE_3__
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/reusedComponent/mutations.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/store/modules/reusedComponent/mutations.js ***!
+  \*****************************************************************/
+/*! exports provided: LOAD_ARRAY, SEARCHING_QUERY */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_ARRAY", function() { return LOAD_ARRAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEARCHING_QUERY", function() { return SEARCHING_QUERY; });
+function LOAD_ARRAY(state, payload) {
+  state.array = payload;
+}
+function SEARCHING_QUERY(state, payload) {
+  state.searchingQuery = payload;
+}
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/reusedComponent/state.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/store/modules/reusedComponent/state.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  array: [],
+  searchingQuery: ''
 });
 
 /***/ }),
@@ -17583,13 +17729,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_category__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/category */ "./resources/js/store/modules/category/index.js");
+/* harmony import */ var _modules_reusedComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/reusedComponent */ "./resources/js/store/modules/reusedComponent/index.js");
+
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
-    categoryModule: _modules_category__WEBPACK_IMPORTED_MODULE_2__["default"]
+    categoryModule: _modules_category__WEBPACK_IMPORTED_MODULE_2__["default"],
+    reusedComponent: _modules_reusedComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
   }
 }));
 

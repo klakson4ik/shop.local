@@ -117,7 +117,28 @@
                 },
             }
         },
+        computed: {
+        },
         methods: {
+            getArrayPagination(){
+                if (this.$store.getters.getSearchingQuery !== 0){
+                    let pattern = this.$store.getters.getSearchingQuery
+                    if (pattern.trim()){
+                        let array = []
+                        for (let item of this.categories){
+                            let regexp = new RegExp(pattern.trim(),'i');
+                            if (regexp.test(item.title)){
+                                array.push(item)
+                            }
+                        }
+                        this.$store.dispatch('LOAD_ARRAY', array)
+                        this.$refs['reRender'].searchingSplitArray()
+                    }
+                }else {
+                    this.$store.dispatch('LOAD_ARRAY', this.categories)
+                    this.$refs['reRender'].splitArray()
+                }
+            },
             editItem(cat){
                 this.$store.dispatch('LOAD_CHECKED_CAT', cat)
                 this.editCat.push({
@@ -181,8 +202,16 @@
             }
 
         },
+        mounted() {
+            this.$store.subscribe((mutation) => {
+                if(mutation.type === 'SEARCHING_QUERY'){
+                    this.getArrayPagination()
+                }
+            })
+        },
         created() {
             this.$store.dispatch('LOAD_CATEGORIES', this.categories)
+            this.$store.dispatch('LOAD_ARRAY', this.categories)
             this.compilationNesting(this.categoryNesting)
         }
     }
