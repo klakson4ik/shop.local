@@ -1,8 +1,8 @@
 import Vue from "vue";
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('main-menu-component', require('./components/MainMenuComponent.vue').default);
-Vue.component('header-component', require('./components/HeaderComponent.vue').default);
+Vue.component('menu-component', require('./components/header/Menu/MenuComponent.vue').default);
+Vue.component('menu-tree-component', require('./components/header/Menu/MenuTreeComponent.vue').default);
 
 //categories
 Vue.component('category-create-component', require('./components/category/CategoryCreateComponent.vue').default);

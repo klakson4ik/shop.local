@@ -1,4 +1,4 @@
-import Home from "../components/HeaderComponent";
+import Home from "../components/header/Menu/MenuComponent";
 
 export default {
     mode: 'history',

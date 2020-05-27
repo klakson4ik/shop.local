@@ -1,10 +1,10 @@
 <template>
-
+    <div>ghbdt</div>
 </template>
 
 <script>
     export default {
-        name: "mainMenuComponent"
+        name: "MenuTreeComponent"
     }
 </script>
 
