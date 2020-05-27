@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="col">
+            <search-component
+                @searchQuery = "getArrayPagination"
+            />
+        </div>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -22,6 +27,8 @@
             <div class="row">
                 <div class="col d-flex justify-content-end">
                     <table-pagination-component
+                        ref ="reRender"
+                        :array = "searchArray"
                         @fillCat = "fillCat"
                     />
                 </div>

@@ -5,7 +5,9 @@
                 <button type="button" class="btn btn-primary" @click="showModal('create')">Добавить категорию</button>
             </div>
             <div class="col">
-                <search-component/>
+                <search-component
+                    @searchQuery = "getArrayPagination"
+                />
             </div>
         </div>
         <table class="table table-striped">
@@ -38,6 +40,7 @@
                 <div class="col d-flex justify-content-end">
                     <table-pagination-component
                         ref ="reRender"
+                        :array = "searchArray"
                         @fillCat = "fillCat"
                     />
                 </div>
@@ -120,25 +123,6 @@
         computed: {
         },
         methods: {
-            getArrayPagination(){
-                if (this.$store.getters.getSearchingQuery !== 0){
-                    let pattern = this.$store.getters.getSearchingQuery
-                    if (pattern.trim()){
-                        let array = []
-                        for (let item of this.categories){
-                            let regexp = new RegExp(pattern.trim(),'i');
-                            if (regexp.test(item.title)){
-                                array.push(item)
-                            }
-                        }
-                        this.$store.dispatch('LOAD_ARRAY', array)
-                        this.$refs['reRender'].searchingSplitArray()
-                    }
-                }else {
-                    this.$store.dispatch('LOAD_ARRAY', this.categories)
-                    this.$refs['reRender'].splitArray()
-                }
-            },
             editItem(cat){
                 this.$store.dispatch('LOAD_CHECKED_CAT', cat)
                 this.editCat.push({
@@ -202,16 +186,9 @@
             }
 
         },
-        mounted() {
-            this.$store.subscribe((mutation) => {
-                if(mutation.type === 'SEARCHING_QUERY'){
-                    this.getArrayPagination()
-                }
-            })
-        },
+
         created() {
             this.$store.dispatch('LOAD_CATEGORIES', this.categories)
-            this.$store.dispatch('LOAD_ARRAY', this.categories)
             this.compilationNesting(this.categoryNesting)
         }
     }

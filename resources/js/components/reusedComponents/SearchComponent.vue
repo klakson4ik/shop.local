@@ -15,15 +15,10 @@
                 pattern : ''
             }
         },
-        // computed: {
-        //     searching() {
-        //         return this.$store.getters.getSearchingQuery
-        //     }
-        // },
 
         watch : {
             pattern: function (val) {
-                this.$store.dispatch('SEARCHING_QUERY', val)
+                this.$emit('searchQuery', val)
             }
         }
 

@@ -488,12 +488,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CategoryEditComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CategoryEditComponent */ "./resources/js/components/category/CategoryEditComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
 /* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table */ "./resources/js/components/category/table.js");
-function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
+//
+//
+//
 //
 //
 //
@@ -617,39 +614,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   computed: {},
   methods: {
-    getArrayPagination: function getArrayPagination() {
-      if (this.$store.getters.getSearchingQuery !== 0) {
-        var pattern = this.$store.getters.getSearchingQuery;
-
-        if (pattern.trim()) {
-          var array = [];
-
-          var _iterator = _createForOfIteratorHelper(this.categories),
-              _step;
-
-          try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var item = _step.value;
-              var regexp = new RegExp(pattern.trim(), 'i');
-
-              if (regexp.test(item.title)) {
-                array.push(item);
-              }
-            }
-          } catch (err) {
-            _iterator.e(err);
-          } finally {
-            _iterator.f();
-          }
-
-          this.$store.dispatch('LOAD_ARRAY', array);
-          this.$refs['reRender'].searchingSplitArray();
-        }
-      } else {
-        this.$store.dispatch('LOAD_ARRAY', this.categories);
-        this.$refs['reRender'].splitArray();
-      }
-    },
     editItem: function editItem(cat) {
       this.$store.dispatch('LOAD_CHECKED_CAT', cat);
       this.editCat.push({
@@ -712,18 +676,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     }
   },
-  mounted: function mounted() {
-    var _this2 = this;
-
-    this.$store.subscribe(function (mutation) {
-      if (mutation.type === 'SEARCHING_QUERY') {
-        _this2.getArrayPagination();
-      }
-    });
-  },
   created: function created() {
     this.$store.dispatch('LOAD_CATEGORIES', this.categories);
-    this.$store.dispatch('LOAD_ARRAY', this.categories);
     this.compilationNesting(this.categoryNesting);
   }
 });
@@ -797,6 +751,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./table */ "./resources/js/components/category/table.js");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -974,14 +935,9 @@ __webpack_require__.r(__webpack_exports__);
       pattern: ''
     };
   },
-  // computed: {
-  //     searching() {
-  //         return this.$store.getters.getSearchingQuery
-  //     }
-  // },
   watch: {
     pattern: function pattern(val) {
-      this.$store.dispatch('SEARCHING_QUERY', val);
+      this.$emit('searchQuery', val);
     }
   }
 });
@@ -1028,6 +984,7 @@ __webpack_require__.r(__webpack_exports__);
   component: {
     DropdownComponent: _DropdownComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  props: ['array'],
   data: function data() {
     return {
       start: 0,
@@ -1037,9 +994,9 @@ __webpack_require__.r(__webpack_exports__);
       count: 1
     };
   },
-  computed: {
+  watch: {
     array: function array() {
-      return this.$store.getters.getArray;
+      this.searchingSplitArray();
     }
   },
   methods: {
@@ -1050,7 +1007,7 @@ __webpack_require__.r(__webpack_exports__);
     searchingSplitArray: function searchingSplitArray() {
       this.start = 0;
       this.end = this.start + this.perPage;
-      this.pass = Math.ceil(this.array.length / 10) * 10 / this.perPage;
+      this.pass = Math.ceil(this.array.length / this.perPage);
       this.count = 1;
       var arr = this.array.slice(this.start, this.end);
       this.$emit('fillCat', arr);
@@ -1111,7 +1068,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.pass = Math.ceil(this.array.length / 10) * 10 / this.perPage;
+    this.pass = Math.ceil(this.array.length / this.perPage);
     this.splitArray();
   }
 });
@@ -2642,7 +2599,16 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col" }, [_c("search-component")], 1)
+      _c(
+        "div",
+        { staticClass: "col" },
+        [
+          _c("search-component", {
+            on: { searchQuery: _vm.getArrayPagination }
+          })
+        ],
+        1
+      )
     ]),
     _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
@@ -2702,6 +2668,7 @@ var render = function() {
           [
             _c("table-pagination-component", {
               ref: "reRender",
+              attrs: { array: _vm.searchArray },
               on: { fillCat: _vm.fillCat }
             })
           ],
@@ -2893,6 +2860,13 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "div",
+      { staticClass: "col" },
+      [_c("search-component", { on: { searchQuery: _vm.getArrayPagination } })],
+      1
+    ),
+    _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
       _vm._v(" "),
@@ -2932,7 +2906,13 @@ var render = function() {
         _c(
           "div",
           { staticClass: "col d-flex justify-content-end" },
-          [_c("table-pagination-component", { on: { fillCat: _vm.fillCat } })],
+          [
+            _c("table-pagination-component", {
+              ref: "reRender",
+              attrs: { array: _vm.searchArray },
+              on: { fillCat: _vm.fillCat }
+            })
+          ],
           1
         )
       ])
@@ -17098,19 +17078,47 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
+      searchArray: [],
       items: []
     };
   },
   methods: {
+    getArrayPagination: function getArrayPagination(query) {
+      if (query.length > 0) {
+        var array = [];
+
+        var _iterator = _createForOfIteratorHelper(this.categories),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var item = _step.value;
+            var regexp = new RegExp(query.trim(), 'i');
+
+            if (regexp.test(item.title)) {
+              array.push(item);
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        this.searchArray = array;
+      } else {
+        this.searchArray = this.categories;
+      }
+    },
     fillCat: function fillCat(array) {
       this.items = [];
 
-      var _iterator = _createForOfIteratorHelper(array),
-          _step;
+      var _iterator2 = _createForOfIteratorHelper(array),
+          _step2;
 
       try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var cat = _step.value;
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var cat = _step2.value;
           this.items.push({
             title: cat.title,
             id: cat.id,
@@ -17118,11 +17126,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           });
         }
       } catch (err) {
-        _iterator.e(err);
+        _iterator2.e(err);
       } finally {
-        _iterator.f();
+        _iterator2.f();
       }
     }
+  },
+  // mounted() {
+  //     this.$store.subscribe((mutation) => {
+  //         if(mutation.type === 'SEARCHING_QUERY'){
+  //             this.getArrayPagination()
+  //         }
+  //     })
+  // },
+  created: function created() {
+    this.searchArray = this.categories;
   }
 });
 

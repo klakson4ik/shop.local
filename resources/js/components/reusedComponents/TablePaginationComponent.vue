@@ -29,6 +29,7 @@
     export default {
         name: "tablePaginationComponent",
         component : {DropdownComponent},
+        props : ['array'],
         data : () => {
             return {
                 start : 0,
@@ -39,9 +40,9 @@
             }
 
         },
-        computed: {
-            array(){
-                return this.$store.getters.getArray
+        watch : {
+            array: function () {
+                this.searchingSplitArray()
             }
         },
         methods : {
@@ -53,7 +54,7 @@
             searchingSplitArray(){
                 this.start = 0
                 this.end = this.start + this.perPage
-                this.pass = (Math.ceil(this.array.length/10)*10)/this.perPage
+                this.pass = Math.ceil(this.array.length / this.perPage)
                 this.count = 1
                 let arr = this.array.slice(this.start, this.end)
                 this.$emit('fillCat', arr)
@@ -111,7 +112,7 @@
             }
         },
         created(){
-            this.pass = (Math.ceil(this.array.length/10)*10)/this.perPage
+            this.pass = Math.ceil(this.array.length / this.perPage)
             this.splitArray()
         }
     }
