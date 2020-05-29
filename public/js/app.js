@@ -807,23 +807,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "headerComponent",
   props: ['categoryNested'],
   data: function data() {
     return {
-      treeDrop: false,
       root: []
     };
   },
   created: function created() {
     for (var item in this.categoryNested) {
-      if (this.categoryNested[item]['parent_id'] == null) this.root.push(this.categoryNested[item]);
+      if (this.categoryNested[item]['parent_id'] == null) this.root.push({
+        item: this.categoryNested[item],
+        is_visible: false
+      });
     }
   }
 });
@@ -843,8 +840,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "MenuTreeComponent"
+  name: "MenuTreeComponent",
+  props: ['children'],
+  data: function data() {
+    return {
+      treeDrop: false
+    };
+  },
+  methods: {
+    log: function log() {
+      console.log(this.children);
+    }
+  },
+  created: function created() {
+    for (var item in this.children) {
+      this.children[item]['is_visible'] = false;
+    }
+
+    this.log();
+  }
 });
 
 /***/ }),
@@ -2915,75 +2939,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "nav",
-    { staticClass: "navbar navbar-expand-lg navbar-light bg-light" },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "collapse navbar-collapse",
-          attrs: { id: "navbarSupportedContent" }
-        },
-        [
-          _c(
-            "ul",
-            { staticClass: "navbar-nav mr-auto" },
-            _vm._l(_vm.root, function(each) {
-              return _c(
-                "li",
-                { staticClass: "nav-item active" },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "nav-link",
-                      attrs: { href: "#" },
-                      on: {
-                        mouseover: function($event) {
-                          _vm.treeDrop = !_vm.treeDrop
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(each.title))]
-                  ),
-                  _vm._v(" "),
-                  _vm.treeDrop === true ? _c("menu-tree-component") : _vm._e()
-                ],
-                1
-              )
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _vm._m(0)
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("form", { staticClass: "form-inline my-2 my-lg-0" }, [
-      _c("input", {
-        staticClass: "form-control mr-sm-2",
-        attrs: { type: "text", placeholder: "Search", "aria-label": "Search" }
+  return _c("div", { staticClass: "container-fluid " }, [
+    _c(
+      "div",
+      { staticClass: "row d-flex justify-content-start" },
+      _vm._l(_vm.root, function(each) {
+        return _c(
+          "div",
+          {
+            staticClass: "col",
+            on: {
+              mouseover: function($event) {
+                each.is_visible = true
+              },
+              mouseleave: function($event) {
+                each.is_visible = false
+              }
+            }
+          },
+          [
+            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+              _vm._v(_vm._s(each.item.title))
+            ]),
+            _vm._v(" "),
+            each.is_visible === true
+              ? _c("menu-tree-component", {
+                  attrs: { children: each.item.children }
+                })
+              : _vm._e()
+          ],
+          1
+        )
       }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-success my-2 my-sm-0",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("Search")]
-      )
-    ])
-  }
-]
+      0
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -3005,7 +2997,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("ghbdt")])
+  return _c(
+    "div",
+    _vm._l(_vm.children, function(child) {
+      return _c(
+        "ul",
+        {
+          on: {
+            mouseover: function($event) {
+              child["is_visible"] = true
+            },
+            mouseleave: function($event) {
+              child["is_visible"] = false
+            }
+          }
+        },
+        [
+          _c(
+            "li",
+            [
+              _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+                _vm._v(_vm._s(child.title))
+              ]),
+              _vm._v(" "),
+              child["is_visible"] === true
+                ? _c("menu-tree-component", {
+                    attrs: { children: child.children }
+                  })
+                : _vm._e()
+            ],
+            1
+          )
+        ]
+      )
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

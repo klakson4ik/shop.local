@@ -1,18 +1,13 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active" v-for="each of root">
-                    <a class="nav-link" href="#" @mouseover="treeDrop = !treeDrop">{{each.title}}</a>
-                    <menu-tree-component v-if="treeDrop === true"/>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-start">
+            <div class="col" v-for="each of root" @mouseover="each.is_visible = true" @mouseleave="each.is_visible = false">
+                <a class="nav-link" href="#" >{{each.item.title}}</a>
+                <menu-tree-component v-if="each.is_visible === true"
+                :children="each.item.children"/>
+            </div>
         </div>
-    </nav>
+    </div>
 </template>
 
 <script>
@@ -21,7 +16,6 @@
         props : ['categoryNested'],
         data() {
             return {
-                treeDrop : false,
                 root : []
             }
         },
@@ -29,7 +23,10 @@
         created() {
             for (let item in this.categoryNested){
                 if (this.categoryNested[item]['parent_id'] == null)
-                    this.root.push(this.categoryNested[item])
+                    this.root.push({
+                        item :this.categoryNested[item],
+                        is_visible : false
+                    })
             }
         }
     }
