@@ -1,10 +1,12 @@
 <template>
-    <div class="container-fluid ">
-        <div class="row d-flex justify-content-start">
-            <div class="col" v-for="each of root" @mouseover="each.is_visible = true" @mouseleave="each.is_visible = false">
-                <a class="nav-link" href="#" >{{each.item.title}}</a>
-                <menu-tree-component v-if="each.is_visible === true"
-                :children="each.item.children"/>
+    <div class="container-fluid menu ">
+        <div class="row root">
+            <div class="d-flex align-items-start">
+                <div class="col bg-primary mg-1" v-for="each of root" @mouseover="each.is_visible = true" @mouseleave="each.is_visible = false">
+                    <a class="nav-link text-center text-light " href="#" >{{each.item.title}}</a>
+                    <menu-tree-component v-if="each.is_visible === true"
+                    :children="each.item.children"/>
+                </div>
             </div>
         </div>
     </div>
@@ -34,5 +36,7 @@
 </script>
 
 <style scoped>
-
+    .menu{
+        z-index: 2;
+    }
 </style>

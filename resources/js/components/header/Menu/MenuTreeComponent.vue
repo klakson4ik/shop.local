@@ -1,11 +1,11 @@
 <template>
     <div >
-        <ul v-for="child of children" @mouseover="child['is_visible'] = true" @mouseleave="child['is_visible'] = false" >
-            <li>
-                <a class="nav-link" href="#"  >{{child.title}}</a>
+        <ul v-for="child of array" @mouseover="child.is_visible = true" @mouseleave="child.is_visible = false" >
+            <li class="bg-primary mg-1">
+                <a class="nav-link text-center text-light" href="#"  >{{child.item.title}}</a>
                 <menu-tree-component
-                    v-if="child['is_visible'] === true"
-                    :children="child.children"/>
+                    v-if="child.is_visible === true"
+                    :children="child.item.children"/>
             </li>
         </ul>
     </div>
@@ -17,19 +17,16 @@
         props : ['children'],
         data() {
             return {
-                treeDrop : false,
-            }
-        },
-        methods: {
-            log() {
-                console.log(this.children)
+                array : []
             }
         },
         created() {
             for (let item in this.children){
-                this.children[item]['is_visible'] = false
+                this.array.push({
+                    item :this.children[item],
+                    is_visible : false
+                })
             }
-            this.log()
         }
 
     }

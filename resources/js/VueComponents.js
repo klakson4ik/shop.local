@@ -4,6 +4,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('menu-component', require('./components/header/Menu/MenuComponent.vue').default);
 Vue.component('menu-tree-component', require('./components/header/Menu/MenuTreeComponent.vue').default);
 
+
 //categories
 Vue.component('category-create-component', require('./components/category/CategoryCreateComponent.vue').default);
 Vue.component('category-index-component', require('./components/category/CategoryIndexComponent.vue').default);
