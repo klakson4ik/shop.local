@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Currency;
-use App\Http\Models\Currency\CurrencyCache;
+use App\Http\Models\Currency\CurrencyModel;
+use App\ModelsDB\Currency;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -15,8 +15,11 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        $a = CurrencyCache::getCurrency();
-        dd($a);
+//        $CurrencyAll = CurrencyModel::getAllCurrency();
+
+        return response()->view('pages.currency.index', [
+            'currencies' => Currency::all(),
+        ]);
     }
 
     /**
