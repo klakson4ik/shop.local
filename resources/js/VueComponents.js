@@ -3,6 +3,7 @@ import Vue from "vue";
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('menu-component', require('./components/header/Menu/MenuComponent.vue').default);
 Vue.component('menu-tree-component', require('./components/header/Menu/MenuTreeComponent.vue').default);
+Vue.component('first-level-menu-component', require('./components/header/Menu/FirstLevelMenuComponent').default);
 
 
 //categories

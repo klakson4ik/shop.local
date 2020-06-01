@@ -1,7 +1,8 @@
-<div class="container-fluid bg-primary mb-3" style="height: 150px" >
+<div class="container-fluid bg-primary mb-3" style="height: 150px; position: relative" >
     <div class="row">
-        @section('change-currency')
-        @show
+{{--        @section('change-currency')--}}
+{{--            @include('')--}}
+{{--        @show--}}
 
         @section('auth-reg')
         @show

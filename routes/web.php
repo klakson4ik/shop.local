@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'MainController@index');
 
 
-
+Route::resource('currency', 'CurrencyController');
 Route::resource('category', 'CategoryController');
 Route::resource('mobile', 'MobileController');
 Route::resource('Television', 'TelevisionController');
