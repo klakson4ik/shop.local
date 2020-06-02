@@ -49,7 +49,7 @@
 
 
         <div v-if="modalVisible===true && modal.create === true">
-            <category-template-popup-component
+            <template-popup-component
                 title = "Создание категории"
             >
                 <category-create-component
@@ -66,11 +66,11 @@
                         @click="saveCreateStatus"
                     />
                 </template>
-            </category-template-popup-component>
+            </template-popup-component>
         </div>
 
         <div v-if="modalVisible===true && modal.edit === true">
-            <category-template-popup-component
+            <template-popup-component
                 title = "Редактирование категории">
                 <category-edit-component
                     title="Редактирование категорий"
@@ -87,7 +87,7 @@
                         @click="saveEditStatus"
                     />
                 </template>
-            </category-template-popup-component>
+            </template-popup-component>
         </div>
     </div>
 </template>
@@ -97,7 +97,7 @@
 
 <script>
     import categoryCreateComponent from "./CategoryCreateComponent";
-    import CategoryTemplatePopupComponent from "./CategoryTemplatePopupComponent";
+    import TemplatePopupComponent from "../reusedComponents/TemplatePopupComponent";
     import CategoryEditComponent from "./CategoryEditComponent";
     import ButtonComponent from "../reusedComponents/ButtonComponent";
 
@@ -107,7 +107,7 @@
         name: "categoryIndexComponent",
         mixins : [tableMixin],
         props: ['categories', 'categoryNesting'],
-        components: {categoryCreateComponent, CategoryTemplatePopupComponent, CategoryEditComponent, ButtonComponent },
+        components: {categoryCreateComponent, TemplatePopupComponent, CategoryEditComponent, ButtonComponent },
         data: () => {
             return {
                 modalVisible : false,

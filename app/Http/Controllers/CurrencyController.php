@@ -15,8 +15,6 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-//        $CurrencyAll = CurrencyModel::getAllCurrency();
-
         return response()->view('pages.currency.index', [
             'currencies' => Currency::all(),
         ]);
@@ -29,7 +27,11 @@ class CurrencyController extends Controller
      */
     public function create()
     {
-        //
+        $CurrencyAll = CurrencyModel::getAllCurrency();
+
+        return response()->json([
+            'currencyAll' => $CurrencyAll,
+        ]);
     }
 
     /**

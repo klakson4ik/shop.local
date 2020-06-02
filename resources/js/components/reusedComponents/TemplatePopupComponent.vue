@@ -24,7 +24,7 @@
 
 <script>
     export default {
-        name: "CategoryTemplatePopupComponent",
+        name: "TemplatePopupComponent",
         props: {
             title: {
                 type: String,

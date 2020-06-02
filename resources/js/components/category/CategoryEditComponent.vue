@@ -69,7 +69,7 @@
 
 <script>
 
-    import CategoryTemplatePopupComponent from "./CategoryTemplatePopupComponent";
+    import CategoryTemplatePopupComponent from "../reusedComponents/TemplatePopupComponent";
     import CategorySnapToAnotherComponent from "./СategorySnapToAnotherComponent";
 
 
