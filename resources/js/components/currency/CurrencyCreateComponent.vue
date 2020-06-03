@@ -13,22 +13,20 @@
                 <th>Код</th>
                 <th>Текущий курс</th>
                 <th>Предыдущий курс</th>
-                <th>Действие</th>
+                <th>Добавить</th>
 
             </tr>
             </thead>
             <tbody>
-            <tr v-for="currency of currencyArray" :key="currencyArray.id">
-                <th scope="row">1</th>
+            <tr v-for="(currency,index) of currencyArray" :key="currencyArray.ID">
+                <th scope="row">{{index+1}}</th>
                 <td class="d-flex justify-content-start">{{currency.Name}}</td>
                 <td >{{currency.CharCode}}</td>
                 <td >{{currency.Value}}</td>
                 <td>{{currency.Previous}}</td>
                 <td>
-                    <!--                <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>-->
-                </td>
                 <td>
-                    <!--                <i class="fa fa-trash" aria-hidden="true" @click="deleteCat(cat)" ></i>-->
+                    <input type="checkbox" name="currency" class="ml-4 shadow"   v-model="changesCurrency[currency.CharCode]">
                 </td>
             </tr>
             </tbody>
@@ -49,8 +47,6 @@
 
 <script>
 
-    import
-
     export default {
         name: "CurrencyCreateComponent",
         props : ['currencyAll'],
@@ -58,6 +54,7 @@
             return {
                 searchArray : [],
                 currencyArray : [],
+                changesCurrency : [],
             }
         },
 
@@ -79,14 +76,32 @@
                     this.searchArray = this.currencyAll
                 }
             },
+            add(){
+                fetch("currency", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        title: "New currencies",
+                        body: this.changesCurrency
+                    })
+                })
+                    .then(response => (response.json()))
+                    // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
+                // this.$emit('close')
+            }
+
+
+
         },
-        // watch : {
-        //     currencyAll : function () {
-        //         this.searchArray = this.currencyAll
-        //
-        //         // console.log(this.searchArray)
-        //     }
-        // }
+        watch : {
+            currencyAll : function () {
+                this.searchArray = this.currencyAll
+            }
+        }
 
     }
 </script>

@@ -12,33 +12,31 @@
 </template>
 
 <script>
-
-
     export default {
         name: "categoryCreateComponent",
         data: () => {
             return {
-                addedCats : [
+                addedCats: [
                     {
-                        placeholder: 'Корневой элемент' ,
+                        placeholder: 'Корневой элемент',
                         text: '',
                     }
                 ],
             }
         },
         computed: {
-            categories(){
+            categories() {
                 return this.$store.getters.getCategories
             }
         },
-        methods : {
+        methods: {
             add(cat) {
                 let is_exist = false
-                for(let value of this.categories){
-                    if(value.title === cat.text.trim())
-                        is_exist= true;
+                for (let value of this.categories) {
+                    if (value.title === cat.text.trim())
+                        is_exist = true;
                 }
-                if(!is_exist) {
+                if (!is_exist) {
                     if (this.addedCats.length > 4)
                         return (alert("Достигнут максимум элементов"))
 
@@ -47,21 +45,21 @@
                         text: '',
                         placeholder: 'Новый элемент',
                     })
-                }else
+                } else
                     return alert("Такая категория существует");
             },
-            del(){
-                if(this.addedCats.length < 2)
+            del() {
+                if (this.addedCats.length < 2)
                     return false
                 this.addedCats.pop();
             },
-            saveCategory(){
+            saveCategory() {
                 fetch("category", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json, text-plain, */*",
-                        "X-CSRF-TOKEN" :  document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
                         title: "New subcategory",
@@ -76,8 +74,8 @@
             },
         },
         mounted() {
-            this.$store.subscribe((mutation , getters) => {
-                if(mutation.type === 'CREATING_SUB_CATEGORY_STATUS' && getters.categoryModule.creatingSubCategoryStatus === true){
+            this.$store.subscribe((mutation, getters) => {
+                if (mutation.type === 'CREATING_SUB_CATEGORY_STATUS' && getters.categoryModule.creatingSubCategoryStatus === true) {
                     this.saveCategory()
                 }
             })

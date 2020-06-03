@@ -7,6 +7,13 @@ namespace App\Http\Models\Currency;
 class CurrencyModel
 {
     public static function getAllCurrency(){
-        return CurrencyCache::getCurrency();
+        $currencyCache =  CurrencyCache::getCurrency();
+        $currencyArr = [];
+
+        foreach ($currencyCache->Valute as $curr){
+            $currencyArr[] = $curr;
+        }
+
+        return $currencyArr;
     }
 }

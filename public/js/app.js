@@ -791,15 +791,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CurrencyCreateComponent",
   props: ['currencyAll'],
   data: function data() {
     return {
       searchArray: [],
-      currencyArray: []
+      currencyArray: [],
+      changesCurrency: []
     };
   },
   methods: {
@@ -832,11 +831,28 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       } else {
         this.searchArray = this.currencyAll;
       }
+    },
+    add: function add() {
+      fetch("currency", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text-plain, */*",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          title: "New currencies",
+          body: this.changesCurrency
+        })
+      }).then(function (response) {
+        return response.json();
+      }); // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
+      // this.$emit('close')
     }
   },
   watch: {
     currencyAll: function currencyAll() {
-      this.searchArray = this.currencyAll(); // console.log(this.searchArray)
+      this.searchArray = this.currencyAll;
     }
   }
 });
@@ -854,6 +870,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reusedComponents_TemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../reusedComponents/TemplatePopupComponent */ "./resources/js/components/reusedComponents/TemplatePopupComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
+/* harmony import */ var _CurrencyCreateComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CurrencyCreateComponent */ "./resources/js/components/currency/CurrencyCreateComponent.vue");
 function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -959,13 +976,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CurrencyIndexComponent",
   components: {
     TemplatePopupComponent: _reusedComponents_TemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
-    ButtonComponent: _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
+    ButtonComponent: _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    CurrencyCreateComponent: _CurrencyCreateComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: ['currencies'],
   data: function data() {
@@ -1049,7 +1069,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       fetch('currency/create').then(function (response) {
         return response.json();
       }).then(function (response) {
-        _this.currencyAll = response.currencyAll.Valute;
+        return _this.currencyAll = response.currencyAll;
       });
     },
     closeModalCreate: function closeModalCreate() {
@@ -1072,8 +1092,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     //     this.$store.dispatch('EDITING_CATEGORY_STATUS', true)
     // },
     saveCreateStatus: function saveCreateStatus() {
-      // this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', true)
-      console.log("Сохранено");
+      this.$refs['addCurrency'].add();
     }
   } // created() {
   //     this.$store.dispatch('LOAD_CATEGORIES', this.categories)
@@ -1349,7 +1368,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     splitArray: function splitArray() {
-      console.log(this.array);
       var arr = this.array.slice(this.start, this.end);
       this.$emit('fillCat', arr);
     },
@@ -1456,7 +1474,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TemplatePopupComponent",
   props: {
@@ -1531,7 +1548,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.modal-mask[data-v-e6c0d60e] {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.5);\n    display: table;\n    transition: opacity 0.3s ease;\n}\n.modal-wrapper[data-v-e6c0d60e] {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container[data-v-e6c0d60e] {\n    max-width: 600px;\n    height: auto;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n    transition: all 0.3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3[data-v-e6c0d60e] {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body[data-v-e6c0d60e] {\n    margin: 20px 0;\n}\n.modal-default-button[data-v-e6c0d60e] {\n    float: right;\n}\n\n/*\n * The following styles are auto-applied to elements with\n * transition=\"modal\" when their visibility is toggled\n * by Vue.js.\n *\n * You can easily play with the modal transition by editing\n * these styles.\n */\n.modal-enter[data-v-e6c0d60e] {\n    opacity: 0;\n}\n.modal-leave-active[data-v-e6c0d60e] {\n    opacity: 0;\n}\n.modal-enter .modal-container[data-v-e6c0d60e],\n.modal-leave-active .modal-container[data-v-e6c0d60e] {\n    transform: scale(1.1);\n}\n\n", ""]);
+exports.push([module.i, "\n.modal-mask[data-v-e6c0d60e] {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.5);\n    display: table;\n    transition: opacity 0.3s ease;\n}\n.modal-wrapper[data-v-e6c0d60e] {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container[data-v-e6c0d60e] {\n    overflow-y: scroll;\n    min-width: 600px;\n    max-width: 70%;\n    height: auto;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n    transition: all 0.3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3[data-v-e6c0d60e] {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body[data-v-e6c0d60e] {\n    margin: 20px 0;\n}\n.modal-default-button[data-v-e6c0d60e] {\n    float: right;\n}\n\n/*\n * The following styles are auto-applied to elements with\n * transition=\"modal\" when their visibility is toggled\n * by Vue.js.\n *\n * You can easily play with the modal transition by editing\n * these styles.\n */\n.modal-enter[data-v-e6c0d60e] {\n    opacity: 0;\n}\n.modal-leave-active[data-v-e6c0d60e] {\n    opacity: 0;\n}\n.modal-enter .modal-container[data-v-e6c0d60e],\n.modal-leave-active .modal-container[data-v-e6c0d60e] {\n    transform: scale(1.1);\n}\n\n", ""]);
 
 // exports
 
@@ -3376,9 +3393,9 @@ var render = function() {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.currencyArray, function(currency) {
-          return _c("tr", { key: _vm.currencyArray.id }, [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("1")]),
+        _vm._l(_vm.currencyArray, function(currency, index) {
+          return _c("tr", { key: _vm.currencyArray.ID }, [
+            _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(index + 1))]),
             _vm._v(" "),
             _c("td", { staticClass: "d-flex justify-content-start" }, [
               _vm._v(_vm._s(currency.Name))
@@ -3391,8 +3408,53 @@ var render = function() {
             _c("td", [_vm._v(_vm._s(currency.Previous))]),
             _vm._v(" "),
             _c("td"),
-            _vm._v(" "),
-            _c("td")
+            _c("td", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.changesCurrency[currency.CharCode],
+                    expression: "changesCurrency[currency.CharCode]"
+                  }
+                ],
+                staticClass: "ml-4 shadow",
+                attrs: { type: "checkbox", name: "currency" },
+                domProps: {
+                  checked: Array.isArray(_vm.changesCurrency[currency.CharCode])
+                    ? _vm._i(_vm.changesCurrency[currency.CharCode], null) > -1
+                    : _vm.changesCurrency[currency.CharCode]
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.changesCurrency[currency.CharCode],
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(
+                            _vm.changesCurrency,
+                            currency.CharCode,
+                            $$a.concat([$$v])
+                          )
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.changesCurrency,
+                            currency.CharCode,
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.changesCurrency, currency.CharCode, $$c)
+                    }
+                  }
+                }
+              })
+            ])
           ])
         }),
         0
@@ -3434,7 +3496,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Предыдущий курс")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Действие")])
+        _c("th", [_vm._v("Добавить")])
       ])
     ])
   }
@@ -3576,6 +3638,7 @@ var render = function() {
               },
               [
                 _c("currency-create-component", {
+                  ref: "addCurrency",
                   attrs: {
                     title: "Создание валюты",
                     currencyAll: _vm.currencyAll
@@ -17940,14 +18003,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************************!*\
   !*** ./resources/js/components/currency/CurrencyCreateComponent.vue ***!
   \**********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CurrencyCreateComponent_vue_vue_type_template_id_a0d12b86_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CurrencyCreateComponent.vue?vue&type=template&id=a0d12b86&scoped=true& */ "./resources/js/components/currency/CurrencyCreateComponent.vue?vue&type=template&id=a0d12b86&scoped=true&");
 /* harmony import */ var _CurrencyCreateComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CurrencyCreateComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/currency/CurrencyCreateComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CurrencyCreateComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CurrencyCreateComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -17977,7 +18041,7 @@ component.options.__file = "resources/js/components/currency/CurrencyCreateCompo
 /*!***********************************************************************************************!*\
   !*** ./resources/js/components/currency/CurrencyCreateComponent.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

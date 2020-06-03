@@ -42,7 +42,7 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dump($request->all());
     }
 
     /**

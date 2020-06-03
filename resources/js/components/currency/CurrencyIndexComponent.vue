@@ -58,6 +58,7 @@
             >
                 <currency-create-component
                     title="Создание валюты"
+                    ref ="addCurrency"
                     :currencyAll = "currencyAll"
                     @close = "closeModalCreate"
                 />
@@ -174,7 +175,7 @@
             newCurrency(){
                 fetch('currency/create')
                     .then(response => (response.json()))
-                    .then(response => {this.currencyAll = response.currencyAll.Valute})
+                    .then(response => this.currencyAll = response.currencyAll)
             },
             closeModalCreate(){
                 this.modal.create = false
@@ -196,8 +197,7 @@
             //     this.$store.dispatch('EDITING_CATEGORY_STATUS', true)
             // },
             saveCreateStatus(){
-                // this.$store.dispatch('CREATING_SUB_CATEGORY_STATUS', true)
-                console.log("Сохранено")
+                this.$refs['addCurrency'].add()
             },
 
         },

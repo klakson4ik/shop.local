@@ -1,9 +1,8 @@
 <template>
     <transition name="modal"  role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDescription">
-        <div class="modal-mask">
+        <div class="modal-mask" >
             <div class="modal-wrapper">
                 <div class="modal-container">
-
                     <div class="modal-header">
                         <h3>{{title}}</h3>
                     </div>
@@ -66,7 +65,9 @@
     }
 
     .modal-container {
-        max-width: 600px;
+        overflow-y: scroll;
+        min-width: 600px;
+        max-width: 70%;
         height: auto;
         margin: 0px auto;
         padding: 20px 30px;
