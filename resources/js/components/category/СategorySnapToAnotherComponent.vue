@@ -5,7 +5,7 @@
                 @searchQuery = "getArrayPagination"
             />
         </div>
-        <table class="table table-striped">
+        <table class="table table-striped "  >
             <thead>
             <tr>
                 <th>#</th>
@@ -90,5 +90,7 @@
 </script>
 
 <style scoped>
-
+.scroll{
+    overflow: hidden;
+}
 </style>

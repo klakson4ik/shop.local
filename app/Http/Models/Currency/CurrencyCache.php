@@ -13,7 +13,13 @@ class CurrencyCache
                 file_put_contents($json_daily_file, $json_daily);
             }
         }
-        return json_decode(file_get_contents($json_daily_file));
+        return  json_decode(file_get_contents($json_daily_file));
+//        $currencyArr = [];
+//
+//        foreach ($currencyObj->Valute as $curr){
+//            $currencyArr[] =  $curr;
+//        }
+
 
     }
 }

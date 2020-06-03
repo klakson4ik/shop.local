@@ -47,6 +47,7 @@
         },
         methods : {
             splitArray(){
+                console.log(this.array)
                 let arr = this.array.slice(this.start, this.end)
                 this.$emit('fillCat', arr)
             },

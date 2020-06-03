@@ -101,10 +101,11 @@
 
     import TemplatePopupComponent from "../reusedComponents/TemplatePopupComponent";
     import ButtonComponent from "../reusedComponents/ButtonComponent";
+    import CurrencyCreateComponent from "./CurrencyCreateComponent";
 
     export default {
         name: "CurrencyIndexComponent",
-        components: {TemplatePopupComponent, ButtonComponent },
+        components: {TemplatePopupComponent, ButtonComponent, CurrencyCreateComponent },
         props : ['currencies'],
         data: () => {
             return {

@@ -20,10 +20,10 @@
             <tbody>
             <tr v-for="currency of currencyArray" :key="currencyArray.id">
                 <th scope="row">1</th>
-                <td class="d-flex justify-content-start">{{currency.name}}</td>
-                <td class="d-flex justify-content-start">{{currency.charCode}}</td>
-                <td class="d-flex justify-content-start">{{currency.value}}</td>
-                <td class="d-flex justify-content-start">{{currency.previous}}</td>
+                <td class="d-flex justify-content-start">{{currency.Name}}</td>
+                <td >{{currency.CharCode}}</td>
+                <td >{{currency.Value}}</td>
+                <td>{{currency.Previous}}</td>
                 <td>
                     <!--                <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>-->
                 </td>
@@ -48,6 +48,9 @@
 </template>
 
 <script>
+
+    import
+
     export default {
         name: "CurrencyCreateComponent",
         props : ['currencyAll'],
@@ -67,7 +70,7 @@
                     let array = []
                     for (let item of this.currencyAll) {
                         let regexp = new RegExp(query.trim(), 'i');
-                        if (regexp.test(item.title)) {
+                        if (regexp.test(item.Name)) {
                             array.push(item)
                         }
                     }
@@ -77,15 +80,14 @@
                 }
             },
         },
-        watch : {
-            currencyAll : function () {
-                // console.log(this.currencyAll)
-                for (let each in this.currencyAll){
-                    console.log(this.currencyAll[each])
-                }
-                this.currencyArray = this.currencyAll
-            }
-        },
+        // watch : {
+        //     currencyAll : function () {
+        //         this.searchArray = this.currencyAll
+        //
+        //         // console.log(this.searchArray)
+        //     }
+        // }
+
     }
 </script>
 
