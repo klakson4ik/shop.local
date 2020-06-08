@@ -16,4 +16,18 @@ class CurrencyModel
 
         return $currencyArr;
     }
+
+    public static function getChangeCurrency($dataArray)
+    {
+        $changeArray = [];
+        $currencyCache =  CurrencyCache::getCurrency();
+        foreach ($dataArray as $curr){
+            foreach ($currencyCache->Valute as $value ){
+                if($curr == $value->CharCode){
+                    $changeArray[] = $value;
+                }
+            }
+        }
+        return $changeArray;
+    }
 }

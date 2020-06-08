@@ -833,6 +833,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     },
     add: function add() {
+      var dataArray = [];
+
+      var _iterator2 = _createForOfIteratorHelper(this.changesCurrency),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var each = _step2.value;
+          if (each.is_change === true) dataArray.push(each.currency);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      console.log(dataArray);
       fetch("currency", {
         method: "POST",
         headers: {
@@ -842,12 +859,41 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         },
         body: JSON.stringify({
           title: "New currencies",
-          body: this.changesCurrency
+          body: dataArray
         })
       }).then(function (response) {
         return response.json();
       }); // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
       // this.$emit('close')
+    },
+    addCurrencies: function addCurrencies(currency) {
+      var is_isset = false;
+
+      var _iterator3 = _createForOfIteratorHelper(this.changesCurrency),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var each = _step3.value;
+
+          if (each.currency === currency) {
+            is_isset = true;
+            each.is_change = false;
+            break;
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      if (is_isset === false) {
+        this.changesCurrency.push({
+          currency: currency,
+          is_change: true
+        });
+      }
     }
   },
   watch: {
@@ -3410,47 +3456,11 @@ var render = function() {
             _c("td"),
             _c("td", [
               _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.changesCurrency[currency.CharCode],
-                    expression: "changesCurrency[currency.CharCode]"
-                  }
-                ],
                 staticClass: "ml-4 shadow",
                 attrs: { type: "checkbox", name: "currency" },
-                domProps: {
-                  checked: Array.isArray(_vm.changesCurrency[currency.CharCode])
-                    ? _vm._i(_vm.changesCurrency[currency.CharCode], null) > -1
-                    : _vm.changesCurrency[currency.CharCode]
-                },
                 on: {
                   change: function($event) {
-                    var $$a = _vm.changesCurrency[currency.CharCode],
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 &&
-                          _vm.$set(
-                            _vm.changesCurrency,
-                            currency.CharCode,
-                            $$a.concat([$$v])
-                          )
-                      } else {
-                        $$i > -1 &&
-                          _vm.$set(
-                            _vm.changesCurrency,
-                            currency.CharCode,
-                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                          )
-                      }
-                    } else {
-                      _vm.$set(_vm.changesCurrency, currency.CharCode, $$c)
-                    }
+                    return _vm.addCurrencies(currency.CharCode)
                   }
                 }
               })
@@ -18003,15 +18013,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************************!*\
   !*** ./resources/js/components/currency/CurrencyCreateComponent.vue ***!
   \**********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CurrencyCreateComponent_vue_vue_type_template_id_a0d12b86_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CurrencyCreateComponent.vue?vue&type=template&id=a0d12b86&scoped=true& */ "./resources/js/components/currency/CurrencyCreateComponent.vue?vue&type=template&id=a0d12b86&scoped=true&");
 /* harmony import */ var _CurrencyCreateComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CurrencyCreateComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/currency/CurrencyCreateComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CurrencyCreateComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CurrencyCreateComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -18041,7 +18050,7 @@ component.options.__file = "resources/js/components/currency/CurrencyCreateCompo
 /*!***********************************************************************************************!*\
   !*** ./resources/js/components/currency/CurrencyCreateComponent.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

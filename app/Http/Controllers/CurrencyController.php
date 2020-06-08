@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Category\CategoryCreate;
+use App\Http\Models\Currency\CurrencyAdd;
 use App\Http\Models\Currency\CurrencyModel;
 use App\ModelsDB\Currency;
 use Illuminate\Http\Request;
@@ -42,7 +44,11 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        dump($request->all());
+        $currencyChange = CurrencyModel::getChangeCurrency($request->post()['body']);
+        if(!empty($currencyChange)){
+            CurrencyAdd::addCategories($currencyChange);
+        }
+
     }
 
     /**

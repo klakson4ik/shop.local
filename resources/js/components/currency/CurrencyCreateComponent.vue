@@ -26,7 +26,7 @@
                 <td>{{currency.Previous}}</td>
                 <td>
                 <td>
-                    <input type="checkbox" name="currency" class="ml-4 shadow"   v-model="changesCurrency[currency.CharCode]">
+                    <input type="checkbox" name="currency" class="ml-4 shadow"   @change="addCurrencies(currency.CharCode)">
                 </td>
             </tr>
             </tbody>
@@ -77,6 +77,12 @@
                 }
             },
             add(){
+                let dataArray = []
+                for(let each of this.changesCurrency){
+                    if(each.is_change === true)
+                        dataArray.push(each.currency)
+                }
+                console.log(dataArray)
                 fetch("currency", {
                     method: "POST",
                     headers: {
@@ -86,12 +92,29 @@
                     },
                     body: JSON.stringify({
                         title: "New currencies",
-                        body: this.changesCurrency
+                        body: dataArray
                     })
                 })
                     .then(response => (response.json()))
                     // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
                 // this.$emit('close')
+            },
+            addCurrencies(currency){
+                let is_isset = false
+                for (let each of this.changesCurrency) {
+                    if (each.currency === currency){
+                        is_isset = true
+                        each.is_change =false
+                        break
+                    }
+                }
+                if(is_isset === false){
+                    this.changesCurrency.push({
+                        currency: currency,
+                        is_change: true
+                        }
+                    )
+                }
             }
 
 
