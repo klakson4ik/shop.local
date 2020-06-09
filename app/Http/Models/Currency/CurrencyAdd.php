@@ -11,7 +11,10 @@ class CurrencyAdd
     public static function addCategories($array){
         dump($array);
         foreach ($array as $value){
-            Currency::firstOrCreate([
+            if(Currency::where('charCode', '=', $value->CharCode)->first()){
+                return false;
+            }
+            Currency::create([
                 'numCode' => $value->NumCode,
                 'charCode' => $value->CharCode,
                 'name' => $value->Name,

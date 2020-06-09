@@ -26,10 +26,10 @@
             <tbody>
             <tr v-for="(currency, index) of currencyArray" :key="currencyArray.id">
                 <th scope="row">{{index+1}}</th>
-                <td class="d-flex justify-content-start">{{currency.name}}</td>
-                <td class="d-flex justify-content-start">{{currency.charCode}}</td>
-                <td class="d-flex justify-content-start">{{currency.value}}</td>
-                <td class="d-flex justify-content-start">{{currency.previous}}</td>
+                <td>{{currency.name}}</td>
+                <td>{{currency.charCode}}</td>
+                <td>{{currency.value}}</td>
+                <td>{{currency.previous}}</td>
                 <td>
                     <!--                <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>-->
                 </td>
@@ -202,9 +202,10 @@
 
         },
 
-        // created() {
-        //     this.$store.dispatch('LOAD_CATEGORIES', this.categories)
-        // }
+        created() {
+            this.searchArray = this.currencies
+            console.log(this.currencies)
+        }
     }
 </script>
 

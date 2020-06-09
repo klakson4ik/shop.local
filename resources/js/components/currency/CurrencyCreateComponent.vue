@@ -82,7 +82,6 @@
                     if(each.is_change === true)
                         dataArray.push(each.currency)
                 }
-                console.log(dataArray)
                 fetch("currency", {
                     method: "POST",
                     headers: {
@@ -95,9 +94,10 @@
                         body: dataArray
                     })
                 })
-                    .then(response => (response.json()))
-                    // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
+                    .then(response => console.log('1111111'))
+                    .then(location.reload(true))
                 // this.$emit('close')
+
             },
             addCurrencies(currency){
                 let is_isset = false

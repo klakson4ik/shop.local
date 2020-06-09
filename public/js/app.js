@@ -849,7 +849,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator2.f();
       }
 
-      console.log(dataArray);
       fetch("currency", {
         method: "POST",
         headers: {
@@ -862,9 +861,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           body: dataArray
         })
       }).then(function (response) {
-        return response.json();
-      }); // .then(response => this.$store.dispatch('LOAD_CATEGORIES', response['categories']))
-      // this.$emit('close')
+        return console.log('1111111');
+      }).then(location.reload(true)); // this.$emit('close')
     },
     addCurrencies: function addCurrencies(currency) {
       var is_isset = false;
@@ -1140,10 +1138,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     saveCreateStatus: function saveCreateStatus() {
       this.$refs['addCurrency'].add();
     }
-  } // created() {
-  //     this.$store.dispatch('LOAD_CATEGORIES', this.categories)
-  // }
-
+  },
+  created: function created() {
+    this.searchArray = this.currencies;
+    console.log(this.currencies);
+  }
 });
 
 /***/ }),
@@ -3571,21 +3570,13 @@ var render = function() {
           return _c("tr", { key: _vm.currencyArray.id }, [
             _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(index + 1))]),
             _vm._v(" "),
-            _c("td", { staticClass: "d-flex justify-content-start" }, [
-              _vm._v(_vm._s(currency.name))
-            ]),
+            _c("td", [_vm._v(_vm._s(currency.name))]),
             _vm._v(" "),
-            _c("td", { staticClass: "d-flex justify-content-start" }, [
-              _vm._v(_vm._s(currency.charCode))
-            ]),
+            _c("td", [_vm._v(_vm._s(currency.charCode))]),
             _vm._v(" "),
-            _c("td", { staticClass: "d-flex justify-content-start" }, [
-              _vm._v(_vm._s(currency.value))
-            ]),
+            _c("td", [_vm._v(_vm._s(currency.value))]),
             _vm._v(" "),
-            _c("td", { staticClass: "d-flex justify-content-start" }, [
-              _vm._v(_vm._s(currency.previous))
-            ]),
+            _c("td", [_vm._v(_vm._s(currency.previous))]),
             _vm._v(" "),
             _c("td"),
             _vm._v(" "),
