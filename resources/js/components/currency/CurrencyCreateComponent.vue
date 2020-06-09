@@ -49,12 +49,13 @@
 
     export default {
         name: "CurrencyCreateComponent",
-        props : ['currencyAll'],
+        props : ['currencyAll', 'currentCurrency'],
         data() {
             return {
                 searchArray : [],
                 currencyArray : [],
                 changesCurrency : [],
+                endArray : []
             }
         },
 
@@ -65,7 +66,7 @@
             getArrayPagination(query) {
                 if (query.length > 0) {
                     let array = []
-                    for (let item of this.currencyAll) {
+                    for (let item of this.endArray) {
                         let regexp = new RegExp(query.trim(), 'i');
                         if (regexp.test(item.Name)) {
                             array.push(item)
@@ -73,7 +74,7 @@
                     }
                     this.searchArray = array
                 } else {
-                    this.searchArray = this.currencyAll
+                    this.searchArray = this.endArray
                 }
             },
             add(){
@@ -94,9 +95,7 @@
                         body: dataArray
                     })
                 })
-                    .then(response => console.log('1111111'))
-                    .then(location.reload(true))
-                // this.$emit('close')
+                    .then(() => window.location.reload())
 
             },
             addCurrencies(currency){
@@ -122,7 +121,23 @@
         },
         watch : {
             currencyAll : function () {
-                this.searchArray = this.currencyAll
+                let array =[]
+                let is_true = false
+                for (let each of this.currencyAll){
+                    for (let curr of this.currentCurrency){
+                        if (each.CharCode === curr.charCode){
+                            is_true = true
+                        }
+                    }
+                    if(is_true === false){
+                        array.push(each)
+                    }else{
+                        is_true = false
+                    }
+                }
+                this.searchArray = array
+                this.endArray = array
+
             }
         }
 

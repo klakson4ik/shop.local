@@ -793,12 +793,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CurrencyCreateComponent",
-  props: ['currencyAll'],
+  props: ['currencyAll', 'currentCurrency'],
   data: function data() {
     return {
       searchArray: [],
       currencyArray: [],
-      changesCurrency: []
+      changesCurrency: [],
+      endArray: []
     };
   },
   methods: {
@@ -809,7 +810,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       if (query.length > 0) {
         var array = [];
 
-        var _iterator = _createForOfIteratorHelper(this.currencyAll),
+        var _iterator = _createForOfIteratorHelper(this.endArray),
             _step;
 
         try {
@@ -829,7 +830,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         this.searchArray = array;
       } else {
-        this.searchArray = this.currencyAll;
+        this.searchArray = this.endArray;
       }
     },
     add: function add() {
@@ -860,9 +861,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           title: "New currencies",
           body: dataArray
         })
-      }).then(function (response) {
-        return console.log('1111111');
-      }).then(location.reload(true)); // this.$emit('close')
+      }).then(function () {
+        return window.location.reload();
+      });
     },
     addCurrencies: function addCurrencies(currency) {
       var is_isset = false;
@@ -896,7 +897,47 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   watch: {
     currencyAll: function currencyAll() {
-      this.searchArray = this.currencyAll;
+      var array = [];
+      var is_true = false;
+
+      var _iterator4 = _createForOfIteratorHelper(this.currencyAll),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var each = _step4.value;
+
+          var _iterator5 = _createForOfIteratorHelper(this.currentCurrency),
+              _step5;
+
+          try {
+            for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+              var curr = _step5.value;
+
+              if (each.CharCode === curr.charCode) {
+                is_true = true;
+              }
+            }
+          } catch (err) {
+            _iterator5.e(err);
+          } finally {
+            _iterator5.f();
+          }
+
+          if (is_true === false) {
+            array.push(each);
+          } else {
+            is_true = false;
+          }
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      this.searchArray = array;
+      this.endArray = array;
     }
   }
 });
@@ -1062,7 +1103,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             var item = _step.value;
             var regexp = new RegExp(query.trim(), 'i');
 
-            if (regexp.test(item.title)) {
+            if (regexp.test(item.name)) {
               array.push(item);
             }
           }
@@ -1141,7 +1182,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   created: function created() {
     this.searchArray = this.currencies;
-    console.log(this.currencies);
   }
 });
 
@@ -3642,9 +3682,9 @@ var render = function() {
                   ref: "addCurrency",
                   attrs: {
                     title: "Создание валюты",
-                    currencyAll: _vm.currencyAll
-                  },
-                  on: { close: _vm.closeModalCreate }
+                    currencyAll: _vm.currencyAll,
+                    currentCurrency: _vm.currencies
+                  }
                 })
               ],
               1

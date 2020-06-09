@@ -60,7 +60,7 @@
                     title="Создание валюты"
                     ref ="addCurrency"
                     :currencyAll = "currencyAll"
-                    @close = "closeModalCreate"
+                    :currentCurrency = "currencies"
                 />
                 <template #footer>
                     <button-component
@@ -132,7 +132,7 @@
                     let array = []
                     for (let item of this.currencies) {
                         let regexp = new RegExp(query.trim(), 'i');
-                        if (regexp.test(item.title)) {
+                        if (regexp.test(item.name)) {
                             array.push(item)
                         }
                     }
@@ -204,7 +204,6 @@
 
         created() {
             this.searchArray = this.currencies
-            console.log(this.currencies)
         }
     }
 </script>
