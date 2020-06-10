@@ -1177,16 +1177,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CurrencySelectComponent",
   props: ['currenciesData'],
   data: function data() {
-    return {};
+    return {
+      changeCurr: ''
+    };
   },
-  methods: {
-    changeCurrency: function changeCurrency(curr) {
-      console.log(curr);
-    }
+  watch: {
+    changeCurr: function changeCurr() {}
   }
 });
 
@@ -3766,26 +3767,44 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("div", { on: { click: _vm.logs } }, [_vm._v("1111")]),
+    _vm._v(" "),
     _c(
       "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.changeCurr,
+            expression: "changeCurr"
+          }
+        ],
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.changeCurr = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
       [
         _c("option", { attrs: { selected: "" } }, [
-          _vm._v("Open this select menu")
+          _vm._v(_vm._s(_vm.changeCurr))
         ]),
         _vm._v(" "),
         _vm._l(_vm.currenciesData, function(curr) {
-          return _c(
-            "option",
-            {
-              domProps: { value: curr.charCode },
-              on: {
-                change: function($event) {
-                  return _vm.changeCurrency(curr.charCode)
-                }
-              }
-            },
-            [_vm._v(_vm._s(curr.charCode))]
-          )
+          return _c("option", { domProps: { value: curr.charCode } }, [
+            _vm._v(_vm._s(curr.charCode))
+          ])
         })
       ],
       2

@@ -1,8 +1,9 @@
 <template>
     <div>
-        <select>
-            <option selected>Open this select menu</option>
-            <option v-for="curr of currenciesData" :value="curr.charCode" @change="changeCurrency(curr.charCode)">{{curr.charCode}}</option>
+        <div @click="logs">1111</div>
+        <select v-model="changeCurr">
+            <option selected>{{changeCurr}}</option>
+            <option v-for="curr of currenciesData" :value="curr.charCode">{{curr.charCode}}</option>
         </select>
     </div>
 </template>
@@ -13,13 +14,14 @@
         props : ['currenciesData'],
         data() {
             return {
+                changeCurr : ''
             }
         },
-        methods: {
-            changeCurrency(curr) {
-                console.log(curr)
+        watch : {
+            changeCurr : function(){
             }
-        },
+        }
+
     }
 </script>
 
