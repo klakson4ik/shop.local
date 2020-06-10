@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Models\Category\CategoryCreate;
 use App\Http\Models\Currency\CurrencyAdd;
 use App\Http\Models\Currency\CurrencyModel;
 use App\ModelsDB\Currency;
@@ -77,12 +76,13 @@ class CurrencyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Currency  $currency
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Currency $currency)
+    public function update(Request $request)
     {
-        //
+        $body = $request['body'];
+        $updateCurr = CurrencyModel::updateCurrency($body);
+        return response()->json($updateCurr);
     }
 
     /**
@@ -93,6 +93,6 @@ class CurrencyController extends Controller
      */
     public function destroy(Currency $currency)
     {
-        //
+        $currency->delete();
     }
 }

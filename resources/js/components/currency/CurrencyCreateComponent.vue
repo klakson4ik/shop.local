@@ -116,8 +116,6 @@
                 }
             }
 
-
-
         },
         watch : {
             currencyAll : function () {

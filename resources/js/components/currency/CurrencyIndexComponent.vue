@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary" @click="showModal('create'), newCurrency()">Добавить валюту</button>
+                <button type="button" class="btn btn-primary" @click="modalVisible = true, newCurrency()">Добавить валюту</button>
             </div>
             <div class="col">
                 <search-component
@@ -19,7 +19,6 @@
                 <th>Код</th>
                 <th>Текущий курс</th>
                 <th>Предыдущий курс</th>
-                <th>Действие</th>
 
             </tr>
             </thead>
@@ -31,10 +30,10 @@
                 <td>{{currency.value}}</td>
                 <td>{{currency.previous}}</td>
                 <td>
-                    <!--                <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>-->
+                    <i class="fa fa-refresh" aria-hidden="true" @click="refresh(currency)"></i>
                 </td>
                 <td>
-                    <!--                <i class="fa fa-trash" aria-hidden="true" @click="deleteCat(cat)" ></i>-->
+                    <i class="fa fa-trash" aria-hidden="true" @click="deleteCat(currency)" ></i>
                 </td>
             </tr>
             </tbody>
@@ -52,7 +51,7 @@
         </div>
 
 
-        <div v-if="modalVisible===true && modal.create === true">
+        <div v-if="modalVisible===true">
             <template-popup-component
                 title = "Новая валюта"
             >
@@ -65,7 +64,7 @@
                 <template #footer>
                     <button-component
                         btnName="Закрыть"
-                        @click="closeModalCreate"
+                        @click="modalVisible = false"
                     />
                     <button-component
                         btnName="Добавить"
@@ -75,26 +74,6 @@
             </template-popup-component>
         </div>
 
-<!--        <div v-if="modalVisible===true && modal.edit === true">-->
-<!--            <template-popup-component-->
-<!--                title = "Редактирование категории">-->
-<!--                <currency-edit-component-->
-<!--                    title="Редактирование категорий"-->
-<!--                    @close="closeModalEdit"-->
-<!--                    @saveEditCategory="saveEditCategory"-->
-<!--                />-->
-<!--                <template #footer>-->
-<!--                    <button-component-->
-<!--                        btnName="Отменить"-->
-<!--                        @click="closeModalEdit"-->
-<!--                    />-->
-<!--                    <button-component-->
-<!--                        btnName="Сохранить"-->
-<!--                        @click="saveEditStatus"-->
-<!--                    />-->
-<!--                </template>-->
-<!--            </template-popup-component>-->
-<!--        </div>-->
     </div>
 </template>
 
@@ -114,19 +93,13 @@
                 searchArray : [],
                 currencyArray : [],
                 currencyAll : [],
-                modal : {
-                    'create': false,
-                    'edit': false,
-                    'delete' : false
-                },
             }
-        },
-        computed: {
         },
         methods: {
             fillArray(array){
                 this.currencyArray = array
             },
+
             getArrayPagination(query) {
                 if (query.length > 0) {
                     let array = []
@@ -141,65 +114,60 @@
                     this.searchArray = this.currencies
                 }
             },
-            // editItem(cat){
-            //     this.$store.dispatch('LOAD_CHECKED_CAT', cat)
-            //     this.editCat.push({
-            //         id: cat.id,
-            //         parent_id: cat.parent_id
-            //     })
-            //
-            // },
-            // deleteCat(cat){
-            //     let act = confirm('Точно удалить ' + cat.title)
-            //     if(act) {
-            //         fetch("category/" + cat.id, {
-            //             method: "DELETE",
-            //             headers: {
-            //                 "Content-Type": "application/json",
-            //                 "Accept": "application/json, text-plain, */*",
-            //                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            //             },
-            //         })
-            //         let elemID = this.categories.findIndex(item=>item.id === cat.id)
-            //         delete this.categories[elemID]
-            //         this.$refs['reRender'].splitArray()
-            //     }
-            //     else
-            //         return false
-            // },
 
-            showModal(act){
-                this.modalVisible = true
-                this.modal[act] = true
+            refresh(curr){
+                fetch("currency/" + curr.id, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-CSRF-TOKEN" :  document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        title: "Edit category ",
+                        body: curr.charCode
+                    })
+                })
+                .then(response => (response.json()))
+                .then(response => {
+                    let elemID = this.currencies.findIndex(item=>item.charCode === response.CharCode)
+                    this.currencies[elemID].value = Math.round(response.Value * 100) /100
+                    this.currencies[elemID].previous = Math.round (response.Previous * 100) /100
+                    this.searchArray = this.currencies
+                    this.$refs['reRender'].splitArray()
+
+                })
             },
+
+            deleteCat(curr){
+                let act = confirm('Точно удалить ' + curr.name)
+                if(act) {
+                    fetch("currency/" + curr.id, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json, text-plain, */*",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                    })
+                    let elemID = this.currencies.findIndex(item=>item.id === curr.id)
+                    this.currencies.splice(elemID, 1)
+                    this.searchArray = this.currencies
+                    this.$refs['reRender'].splitArray()
+                }
+                else
+                    return false
+            },
+
             newCurrency(){
                 fetch('currency/create')
                     .then(response => (response.json()))
                     .then(response => this.currencyAll = response.currencyAll)
             },
-            closeModalCreate(){
-                this.modal.create = false
-                this.modalVisible = false
-            },
-            // closeModalEdit(){
-            //     this.modal.edit = false
-            //     this.modalVisible = false
-            //     let elemID = this.categories.findIndex(item=>item.id === this.editCat[0].id)
-            //     this.categories[elemID].parent_id = this.editCat[0].parent_id
-            //     this.$refs['reRender'].splitArray()
-            // },
-            // saveEditCategory(){
-            //     this.modal.edit = false
-            //     this.modalVisible = false
-            //     // this.$refs['reRender'].splitArray()
-            // },
-            // saveEditStatus(){
-            //     this.$store.dispatch('EDITING_CATEGORY_STATUS', true)
-            // },
+
             saveCreateStatus(){
                 this.$refs['addCurrency'].add()
             },
-
         },
 
         created() {

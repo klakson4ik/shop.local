@@ -30,4 +30,10 @@ class CurrencyModel
         }
         return $changeArray;
     }
+
+    public static function updateCurrency($curr){
+        $currencyCache = CurrencyCache::getCurrency()->Valute;
+        return $currencyCache->$curr;
+
+    }
 }

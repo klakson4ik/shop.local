@@ -15,6 +15,8 @@ Vue.component('category-snap-to-another-component', require('./components/catego
 //currency
 Vue.component('currency-index-component', require('./components/currency/CurrencyIndexComponent.vue').default);
 Vue.component('currency-create-component', require('./components/currency/CurrencyCreateComponent.vue').default);
+Vue.component('currency-select-component', require('./components/currency/CurrencySelectComponent.vue').default);
+
 
 //reusedComponent
 Vue.component('table-pagination-component', require('./components/reusedComponents/TablePaginationComponent.vue').default)
