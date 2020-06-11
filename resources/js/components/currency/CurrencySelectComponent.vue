@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div @click="logs">1111</div>
+<!--        <div @click="logs">1111</div>-->
         <select v-model="changeCurr">
             <option selected>{{changeCurr}}</option>
             <option v-for="curr of currenciesData" :value="curr.charCode">{{curr.charCode}}</option>
@@ -19,6 +19,7 @@
         },
         watch : {
             changeCurr : function(){
+                fetch('/currency?curr=' + this.changeCurr)
             }
         }
 

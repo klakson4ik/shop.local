@@ -1187,7 +1187,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   watch: {
-    changeCurr: function changeCurr() {}
+    changeCurr: function changeCurr() {
+      fetch('/currency?curr=' + this.changeCurr);
+    }
   }
 });
 
@@ -3767,8 +3769,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { on: { click: _vm.logs } }, [_vm._v("1111")]),
-    _vm._v(" "),
     _c(
       "select",
       {

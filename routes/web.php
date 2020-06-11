@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'MainController@index');
+//Route::get('/currency/{curr}', 'Widgets\CurrencyController@getCurrency')->where('curr' , '[A-Z]{3}');
+Route::get('/currency/aaa?curr={curr}', 'aaa@getCurrency');
 
 
 Route::resource('currency', 'CurrencyController');
