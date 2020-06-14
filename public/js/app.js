@@ -1177,18 +1177,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CurrencySelectComponent",
-  props: ['currenciesData'],
+  props: ['currenciesData', 'currencyCookie'],
   data: function data() {
     return {
-      changeCurr: ''
+      changeCurr: this.currencyCookie
     };
   },
   watch: {
     changeCurr: function changeCurr() {
-      fetch('/currency?curr=' + this.changeCurr);
+      fetch('currencyWidget?curr=' + this.changeCurr);
     }
   }
 });
@@ -3780,6 +3779,7 @@ var render = function() {
             expression: "changeCurr"
           }
         ],
+        attrs: { name: "currency" },
         on: {
           change: function($event) {
             var $$selectedVal = Array.prototype.filter
@@ -3796,18 +3796,12 @@ var render = function() {
           }
         }
       },
-      [
-        _c("option", { attrs: { selected: "" } }, [
-          _vm._v(_vm._s(_vm.changeCurr))
-        ]),
-        _vm._v(" "),
-        _vm._l(_vm.currenciesData, function(curr) {
-          return _c("option", { domProps: { value: curr.charCode } }, [
-            _vm._v(_vm._s(curr.charCode))
-          ])
-        })
-      ],
-      2
+      _vm._l(_vm.currenciesData, function(curr) {
+        return _c("option", { domProps: { value: curr.charCode } }, [
+          _vm._v(_vm._s(curr.charCode))
+        ])
+      }),
+      0
     )
   ])
 }

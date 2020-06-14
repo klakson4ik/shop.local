@@ -1,8 +1,7 @@
 <template>
     <div>
 <!--        <div @click="logs">1111</div>-->
-        <select v-model="changeCurr">
-            <option selected>{{changeCurr}}</option>
+        <select v-model="changeCurr" name="currency">
             <option v-for="curr of currenciesData" :value="curr.charCode">{{curr.charCode}}</option>
         </select>
     </div>
@@ -11,16 +10,16 @@
 <script>
     export default {
         name: "CurrencySelectComponent",
-        props : ['currenciesData'],
+        props : ['currenciesData','currencyCookie'],
         data() {
             return {
-                changeCurr : ''
+                changeCurr : this.currencyCookie
             }
         },
         watch : {
             changeCurr : function(){
-                fetch('/currency?curr=' + this.changeCurr)
-            }
+                fetch('currencyWidget?curr=' + this.changeCurr)
+            },
         }
 
     }

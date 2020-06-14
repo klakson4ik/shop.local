@@ -14,11 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'MainController@index');
-//Route::get('/currency/{curr}', 'Widgets\CurrencyController@getCurrency')->where('curr' , '[A-Z]{3}');
-Route::get('/currency/aaa?curr={curr}', 'aaa@getCurrency');
+Route::get('/currencyWidget', 'Widgets\CurrencyWidgetController@getCurrency');
 
 
-Route::resource('currency', 'CurrencyController');
+Route::resource('currency', 'CurrencyWidgetController');
 Route::resource('category', 'CategoryController');
 Route::resource('mobile', 'MobileController');
 Route::resource('Television', 'TelevisionController');
