@@ -17,7 +17,7 @@ Route::get('/', 'MainController@index');
 Route::get('/currencyWidget', 'Widgets\CurrencyWidgetController@getCurrency');
 
 
-Route::resource('currency', 'CurrencyWidgetController');
+Route::resource('currency', 'CurrencyController');
 Route::resource('category', 'CategoryController');
 Route::resource('mobile', 'MobileController');
 Route::resource('Television', 'TelevisionController');

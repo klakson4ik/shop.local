@@ -9,7 +9,6 @@ use App\ModelsDB\Currency;
 class CurrencyAdd
 {
     public static function addCategories($array){
-        dump($array);
         foreach ($array as $value){
             if(Currency::where('charCode', '=', $value->CharCode)->first()){
                 return false;

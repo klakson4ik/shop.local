@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Http\Models\Currency\CurrencyCache;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use function foo\func;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +27,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function(){
+            CurrencyCache::setCacheCurrency();
+        })->everyMinute();
     }
 
     /**
