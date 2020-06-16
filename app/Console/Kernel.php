@@ -30,6 +30,12 @@ class Kernel extends ConsoleKernel
         $schedule->call(function(){
             CurrencyCache::setCacheCurrency();
         })->everyMinute();
+
+        $schedule->call(function(){
+            CurrencyCache::updateDB();
+        })->everyMinute();
+
+
     }
 
     /**

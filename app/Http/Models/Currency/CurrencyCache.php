@@ -9,8 +9,8 @@ use App\ModelsDB\Currency;
 class CurrencyCache
 {
     public static function setCacheCurrency(){
-        $json_daily_file = 'daily.json';
-        if (!is_file($json_daily_file) || filemtime($json_daily_file) < time() - 3600) {
+        $json_daily_file = 'storage/framework/cache/daily.json';
+        if (!is_file($json_daily_file) || filemtime($json_daily_file) < time() - 60) {
             if ($json_daily = file_get_contents('https://www.cbr-xml-daily.ru/daily_json.js')) {
                 file_put_contents($json_daily_file, $json_daily);
             }
@@ -19,17 +19,25 @@ class CurrencyCache
     }
 
     public static function updateDB(){
-        $json = file_get_contents('daily.json');
-        dd($json);
-//        $curr = Currency::all();
-        foreach ($json->Valute as $value)
+        $json = json_decode(file_get_contents('storage/framework/cache/daily.json'));
+        $curr = Currency::all();
+        foreach ($curr as $value)
         {
-//            var_dump($value);
+            $charCode = $value->charCode;
+            $body = [
+                'numCode' => $json->Valute->$charCode->NumCode,
+                'name' => $json->Valute->$charCode->Name,
+                'value' => $json->Valute->$charCode->Value,
+                'previous' => $json->Valute->$charCode->Previous,
+            ];
+            $value->update($body);
         }
     }
 
     public static function getCurrency()
     {
-        return json_decode(file_get_contents('daily.json'));
+        dd(file_get_contents('storage/framework/cache/daily.json'));
+//        $arr = file_get_contents('storage/framework/cache/data/daily.json');
+//        return $arr;
     }
 }
