@@ -9,8 +9,8 @@ use App\ModelsDB\Currency;
 class CurrencyCache
 {
     public static function setCacheCurrency(){
-        $json_daily_file = 'storage/framework/cache/daily.json';
-        if (!is_file($json_daily_file) || filemtime($json_daily_file) < time() - 60) {
+        $json_daily_file = 'daily.json';
+        if (!is_file($json_daily_file) || filemtime($json_daily_file) < time() - 3600) {
             if ($json_daily = file_get_contents('https://www.cbr-xml-daily.ru/daily_json.js')) {
                 file_put_contents($json_daily_file, $json_daily);
             }
@@ -19,7 +19,7 @@ class CurrencyCache
     }
 
     public static function updateDB(){
-        $json = json_decode(file_get_contents('storage/framework/cache/daily.json'));
+        $json = json_decode(file_get_contents('daily.json'));
         $curr = Currency::all();
         foreach ($curr as $value)
         {
@@ -36,8 +36,6 @@ class CurrencyCache
 
     public static function getCurrency()
     {
-        dd(file_get_contents('storage/framework/cache/daily.json'));
-//        $arr = file_get_contents('storage/framework/cache/data/daily.json');
-//        return $arr;
+        return json_decode(file_get_contents('daily.json'));
     }
 }

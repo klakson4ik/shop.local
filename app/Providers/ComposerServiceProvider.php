@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Widgets\SearchWidgetController;
 use App\Http\Models\Category\CategoryNesting;
 use App\ModelsDB\Currency;
 use Illuminate\Support\Facades\View;
@@ -28,6 +29,7 @@ class ComposerServiceProvider extends ServiceProvider
     {
         $this->menuLoad();
         $this->selectLoad();
+        $this->searchLoad();
     }
 
     public function menuLoad(){
@@ -39,6 +41,12 @@ class ComposerServiceProvider extends ServiceProvider
     public function selectLoad(){
         View::composer('partials.header', function ($view){
             $view->with('currencies', Currency::all());
+        });
+    }
+
+    public function searchLoad(){
+        View::composer('partials.header', function ($view){
+            $view->with('searchingList', SearchWidgetController::getListSearching());
         });
     }
 }

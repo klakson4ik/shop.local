@@ -9,6 +9,7 @@
         @show
 
         @section('search-panel')
+            @include('pages.search.generalSearch')
         @show
 
         @section('basket')

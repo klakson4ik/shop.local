@@ -26,14 +26,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
         $schedule->call(function(){
             CurrencyCache::setCacheCurrency();
-        })->everyMinute();
+        })->hourly();
 
         $schedule->call(function(){
             CurrencyCache::updateDB();
-        })->everyMinute();
+        })->hourly();
 
 
     }
