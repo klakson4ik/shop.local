@@ -4,23 +4,20 @@
 namespace App\Http\Models\Search;
 
 
+use Illuminate\Support\Facades\DB;
+
 class SearchModel
 {
     public static function createArraySearching(){
         $fullArray=[];
-        $baseArray = ['Computer', 'LargeTechnical', 'Mobile', 'Television', 'Category'];
+        $baseArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
         foreach ($baseArray as $cat){
-            $temp = 'App\ModelsDB\\' . $cat;
-            $class = new $temp();
-            $array = $class :: all();
-            $fullArray[] = $array;
-
-//            $value = $class::where('title', $obj['title'])->first()->id;
-//            $category = Category::where('title', $obj[$endKey])->first()->id;
+            $fullArray[$cat] = DB::select("SELECT title,alias FROM $cat");
         }
-        dd($fullArray);
+        return $fullArray;
 
     }
+
 
     public static function getList()
     {

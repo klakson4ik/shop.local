@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'MainController@index');
 Route::get('/currencyWidget', 'Widgets\CurrencyWidgetController@getCurrency');
+Route::get('/searchingWidget', 'Widgets\SearchWidgetController@getListSearching');
 
 
 Route::resource('currency', 'CurrencyController');

@@ -29,7 +29,6 @@ class ComposerServiceProvider extends ServiceProvider
     {
         $this->menuLoad();
         $this->selectLoad();
-        $this->searchLoad();
     }
 
     public function menuLoad(){
@@ -44,9 +43,4 @@ class ComposerServiceProvider extends ServiceProvider
         });
     }
 
-    public function searchLoad(){
-        View::composer('partials.header', function ($view){
-            $view->with('searchingList', SearchWidgetController::getListSearching());
-        });
-    }
 }

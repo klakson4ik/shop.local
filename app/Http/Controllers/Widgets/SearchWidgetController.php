@@ -8,6 +8,6 @@ class SearchWidgetController
 {
     public static function getListSearching()
     {
-        return SearchModel::getList();
+        return json_encode(SearchModel::getList());
     }
 }

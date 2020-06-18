@@ -1320,17 +1320,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "GeneralSearchComponent",
-  props: ['searchingList'],
   data: function data() {
     return {
-      pattern: ''
+      pattern: '',
+      listSearching: '',
+      resultArray: []
     };
   },
+  methods: {
+    cl: function cl() {// console.log(this.searchingList)
+    }
+  },
   watch: {
-    pattern: function pattern(val) {// this.$emit('searchQuery', val)
-    },
-    searchingList: function searchingList() {
-      console.log(this.searchingList);
+    pattern: function pattern(query) {
+      var _this = this;
+
+      if (Object.keys(this.listSearching).length === 0) {
+        fetch('searchingWidget').then(function (response) {
+          return response.json();
+        }).then(function (response) {
+          return _this.listSearching = response;
+        });
+      }
+
+      if (query.length > 2) {
+        for (var each in this.listSearching) {
+          console.log(this.listSearching[each]);
+        } // let regexp = new RegExp(query.trim(), 'i');
+        // if (regexp.test(item.Name)) {
+        //     array.push(item)
+        // }
+
+      } else {}
     }
   }
 });
@@ -4086,23 +4107,20 @@ var render = function() {
       }
     }),
     _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
+    _c("div", { staticClass: "input-group-append" }, [
       _c(
         "button",
-        { staticClass: "btn btn-success", attrs: { type: "button" } },
+        {
+          staticClass: "btn btn-success",
+          attrs: { type: "button" },
+          on: { click: _vm.cl }
+        },
         [_vm._v("Search")]
       )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
