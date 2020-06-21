@@ -4,6 +4,15 @@
         <div class="input-group-append">
             <button class="btn btn-success" type="button" @click="cl">Search</button>
         </div>
+        <div class="container ">
+            <div class="it">
+                <div class="row" v-for="each of resultArray" v-if="resultArray !== 0">
+                    <div class="col-12">
+                        <input class="form-control each" type="text" :placeholder="each['title']" readonly @click="eachClick(each)">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -18,6 +27,10 @@
             }
         },
         methods: {
+            eachClick(obj){
+                this.pattern = obj['title']
+            },
+
             cl() {
                 // console.log(this.searchingList)
             }
@@ -30,18 +43,20 @@
                         .then(response => this.listSearching = response)
                 }
                 if(query.length > 2){
-                    for (let each in this.listSearching){
-                        console.log(this.listSearching[each])
+                    this.resultArray = []
+                    for (let each in this.listSearching) {
+                        for (let cat of this.listSearching[each]) {
+                            if (this.resultArray.length < 9) {
+                                let regexp = new RegExp(query.trim(), 'i');
+                                if (regexp.test(cat['title'])) {
+                                    this.resultArray.push(cat)
+                                }
+
+                            }
+                        }
                     }
-
-                    // let regexp = new RegExp(query.trim(), 'i');
-                    // if (regexp.test(item.Name)) {
-                    //     array.push(item)
-                    // }
                 }else{
-
-
-
+                    this.resultArray = []
                 }
 
             },
@@ -51,5 +66,15 @@
 </script>
 
 <style scoped>
+    .it{
+        width: inherit;
+        position: absolute;
+        z-index: 10;
+        left: 0px;
+    }
+
+    .each:hover{
+        background: lightblue;
+    }
 
 </style>
