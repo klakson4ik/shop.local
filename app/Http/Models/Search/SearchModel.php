@@ -25,4 +25,13 @@ class SearchModel
 
     }
 
+    public static function getQueryArray($pattern){
+        $resultArray=[];
+        $baseArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
+        foreach ($baseArray as $cat){
+            $resultArray[$cat] = DB::select("SELECT * FROM $cat WHERE title LIKE '%$pattern%' ");
+        }
+        return $resultArray;
+    }
+
 }

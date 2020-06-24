@@ -2,7 +2,7 @@
     <div class="input-group w-25">
         <input type="text" class="form-control" placeholder="Найти..." v-model="pattern" aria-label="" aria-describedby="basic-addon1">
         <div class="input-group-append">
-            <button class="btn btn-success" type="button" @click="cl">Search</button>
+            <button class="btn btn-success" type="button" @click="redirect(pattern)">Search</button>
         </div>
         <div class="container ">
             <div class="it">
@@ -30,10 +30,11 @@
             eachClick(obj){
                 this.pattern = obj['title']
             },
-
-            cl() {
-                // console.log(this.searchingList)
+            redirect(pattern)
+            {
+                window.location = 'searching?query=' + pattern
             }
+
         },
         watch : {
             pattern: function (query) {

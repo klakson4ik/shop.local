@@ -17,6 +17,8 @@ Route::get('/', 'MainController@index');
 Route::get('/currencyWidget', 'Widgets\CurrencyWidgetController@getCurrency');
 Route::get('/searchingWidget', 'Widgets\SearchWidgetController@getListSearching');
 
+Route::get('searching', 'SearchingController@getResultSearch');
+
 
 Route::resource('currency', 'CurrencyController');
 Route::resource('category', 'CategoryController');
@@ -24,4 +26,7 @@ Route::resource('mobile', 'MobileController');
 Route::resource('Television', 'TelevisionController');
 Route::resource('Computer', 'ComputerController');
 Route::resource('large_technical', 'ComputerController');
+
+Route::resource('user', 'UserController');
+
 
