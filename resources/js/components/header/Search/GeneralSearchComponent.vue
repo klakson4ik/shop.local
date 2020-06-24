@@ -74,7 +74,7 @@
     }
 
     .each:hover{
-        background: lightblue;
+        background: light;
     }
 
 </style>
