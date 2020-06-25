@@ -28,7 +28,5 @@ Vue.component('dropdown-component', require('./components/reusedComponents/Dropd
 Vue.component('button-component', require('./components/reusedComponents/ButtonComponent.vue').default)
 Vue.component('search-component', require('./components/reusedComponents/SearchComponent.vue').default)
 
-//User
-Vue.component('user-index-component', require('./components/User/UserIndexComponent.vue').default)
 
 
