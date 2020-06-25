@@ -27,6 +27,6 @@ Route::resource('Television', 'TelevisionController');
 Route::resource('Computer', 'ComputerController');
 Route::resource('large_technical', 'ComputerController');
 
-Route::resource('user', 'UserController');
+Route::resource('people', 'PeopleController');
 
 

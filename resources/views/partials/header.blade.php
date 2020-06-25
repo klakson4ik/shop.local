@@ -6,7 +6,7 @@
     </div>
 
         @section('auth-reg')
-            @include('pages.user.index')
+            @include('pages.people.index')
         @show
 
         @section('search-panel')
