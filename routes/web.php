@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,13 @@ Route::resource('Television', 'TelevisionController');
 Route::resource('Computer', 'ComputerController');
 Route::resource('large_technical', 'ComputerController');
 
+<<<<<<< HEAD
 Route::resource('people', 'PeopleController');
+=======
+>>>>>>> 22e21528aa5f4afd497e38d1dec154fb961117b6
 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

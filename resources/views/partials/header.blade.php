@@ -6,7 +6,11 @@
     </div>
 
         @section('auth-reg')
+<<<<<<< HEAD
             @include('pages.people.index')
+=======
+            @include('auth.widgets')
+>>>>>>> 22e21528aa5f4afd497e38d1dec154fb961117b6
         @show
 
         @section('search-panel')
