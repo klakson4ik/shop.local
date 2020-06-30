@@ -15,14 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'MainController@index');
-Route::get('/currencyWidget', 'Widgets\CurrencyWidgetController@getCurrency');
-Route::get('/searchingWidget', 'Widgets\SearchWidgetController@getListSearching');
+Route::get('currencyWidget', 'Widgets\CurrencyWidgetController@getCurrency');
+Route::get('searchingWidget', 'Widgets\SearchWidgetController@getListSearching');
 
 Route::get('searching', 'SearchingController@getResultSearch');
 
 
 Route::resource('currency', 'CurrencyController');
 Route::resource('category', 'CategoryController');
+Route::resource('user_control', 'UserControlController');
+
 Route::resource('mobile', 'MobileController');
 Route::resource('Television', 'TelevisionController');
 Route::resource('Computer', 'ComputerController');

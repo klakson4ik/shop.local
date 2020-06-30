@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ModelsDB\User;
 use Illuminate\Http\Request;
 
 class UserControlController extends Controller
@@ -13,7 +14,9 @@ class UserControlController extends Controller
      */
     public function index()
     {
-        //
+        return response()->view('pages.userControl.index', [
+            'users' => User::all(),
+        ]);
     }
 
     /**
