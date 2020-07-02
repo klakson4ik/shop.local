@@ -956,6 +956,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reusedComponents_TemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../reusedComponents/TemplatePopupComponent */ "./resources/js/components/reusedComponents/TemplatePopupComponent.vue");
 /* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
 /* harmony import */ var _CurrencyCreateComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CurrencyCreateComponent */ "./resources/js/components/currency/CurrencyCreateComponent.vue");
+/* harmony import */ var _reusedComponents_TablePaginationComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reusedComponents/TablePaginationComponent */ "./resources/js/components/reusedComponents/TablePaginationComponent.vue");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -1044,12 +1045,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CurrencyIndexComponent",
   components: {
     TemplatePopupComponent: _reusedComponents_TemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     ButtonComponent: _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    CurrencyCreateComponent: _CurrencyCreateComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
+    CurrencyCreateComponent: _CurrencyCreateComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    TablePaginationComponent: _reusedComponents_TablePaginationComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: ['currencies'],
   data: function data() {
@@ -1694,6 +1697,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _reusedComponents_TemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../reusedComponents/TemplatePopupComponent */ "./resources/js/components/reusedComponents/TemplatePopupComponent.vue");
+/* harmony import */ var _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reusedComponents/ButtonComponent */ "./resources/js/components/reusedComponents/ButtonComponent.vue");
+/* harmony import */ var _reusedComponents_TablePaginationComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reusedComponents/TablePaginationComponent */ "./resources/js/components/reusedComponents/TablePaginationComponent.vue");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -1774,12 +1780,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "UserControlIndexComponent",
+  comments: {
+    TemplatePopupComponent: _reusedComponents_TemplatePopupComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ButtonComponent: _reusedComponents_ButtonComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    TablePaginationComponent: _reusedComponents_TablePaginationComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
   props: ['users'],
   data: function data() {
     return {
@@ -1819,49 +1829,47 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       } else {
         this.searchArray = this.users;
       }
-    } // refresh(curr){
-    //     fetch("currency/" + curr.id, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Accept": "application/json, text-plain, */*",
-    //             "X-CSRF-TOKEN" :  document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    //         },
-    //         body: JSON.stringify({
-    //             title: "Edit category ",
-    //             body: curr.charCode
-    //         })
-    //     })
-    //         .then(response => (response.json()))
-    //         .then(response => {
-    //             let elemID = this.currencies.findIndex(item=>item.charCode === response.CharCode)
-    //             this.currencies[elemID].value = Math.round(response.Value * 100) /100
-    //             this.currencies[elemID].previous = Math.round (response.Previous * 100) /100
-    //             this.searchArray = this.currencies
-    //             this.$refs['reRender'].splitArray()
-    //
-    //         })
-    // },
-    // deleteCat(user){
-    //     let act = confirm('Точно удалить ' + user.name)
-    //     if(act) {
-    //         fetch("currency/" + user.id, {
-    //             method: "DELETE",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Accept": "application/json, text-plain, */*",
-    //                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    //             },
-    //         })
-    //         let elemID = this.users.findIndex(item=>item.id === user.id)
-    //         this.users.splice(elemID, 1)
-    //         this.searchArray = this.users
-    //         this.$refs['reRender'].splitArray()
-    //     }
-    //     else
-    //         return false
-    // },
-    // newCurrency(){
+    },
+    edit: function edit(user) {
+      var _this = this;
+
+      fetch("user_control/" + user.id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text-plain, */*",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          title: "Edit category ",
+          body: user
+        })
+      }).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        _this.$refs['reRender'].splitArray();
+      });
+    },
+    deleteUser: function deleteUser(user) {
+      var act = confirm('Точно удалить ' + user.name);
+
+      if (act) {
+        fetch("user_control/" + user.id, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text-plain, */*",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        });
+        var elemID = this.users.findIndex(function (item) {
+          return item.id === user.id;
+        });
+        this.users.splice(elemID, 1);
+        this.searchArray = this.users;
+        this.$refs['reRender'].splitArray();
+      } else return false;
+    } // newCurrency(){
     //     fetch('currency/create')
     //         .then(response => (response.json()))
     //         .then(response => this.currencyAll = response.currencyAll)
@@ -1873,7 +1881,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
   },
   created: function created() {
-    console.log(this.users); // this.searchArray = this.users
+    this.searchArray = this.users;
   }
 });
 
@@ -4764,6 +4772,35 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                _vm.modalVisible = true
+              }
+            }
+          },
+          [_vm._v("Добавить валюту")]
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col" },
+        [
+          _c("search-component", {
+            on: { searchQuery: _vm.getArrayPagination }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
       _vm._v(" "),
@@ -4775,13 +4812,52 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(user.name))]),
             _vm._v(" "),
-            _c("td"),
+            _c("td", [_vm._v(_vm._s(user.email))]),
             _vm._v(" "),
-            _c("td")
+            _c("td", [
+              _c("i", {
+                staticClass: "fa fa-wrench ",
+                attrs: { "aria-hidden": "true" },
+                on: {
+                  click: function($event) {
+                    return _vm.edit(user)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("i", {
+                staticClass: "fa fa-trash",
+                attrs: { "aria-hidden": "true" },
+                on: {
+                  click: function($event) {
+                    return _vm.deleteUser(user)
+                  }
+                }
+              })
+            ])
           ])
         }),
         0
       )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col d-flex justify-content-end" },
+          [
+            _c("table-pagination-component", {
+              ref: "reRender",
+              attrs: { array: _vm.searchArray },
+              on: { fillCat: _vm.fillArray }
+            })
+          ],
+          1
+        )
+      ])
     ])
   ])
 }
@@ -4794,7 +4870,9 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Имя")])
+        _c("th", [_vm._v("Имя")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Почта")])
       ])
     ])
   }

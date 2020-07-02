@@ -82,10 +82,11 @@
     import TemplatePopupComponent from "../reusedComponents/TemplatePopupComponent";
     import ButtonComponent from "../reusedComponents/ButtonComponent";
     import CurrencyCreateComponent from "./CurrencyCreateComponent";
+    import TablePaginationComponent from "../reusedComponents/TablePaginationComponent";
 
     export default {
         name: "CurrencyIndexComponent",
-        components: {TemplatePopupComponent, ButtonComponent, CurrencyCreateComponent },
+        components: {TemplatePopupComponent, ButtonComponent, CurrencyCreateComponent, TablePaginationComponent },
         props : ['currencies'],
         data: () => {
             return {

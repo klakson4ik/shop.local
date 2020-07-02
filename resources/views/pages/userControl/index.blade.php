@@ -2,9 +2,9 @@
 
 @section('content')
     <div data-app>
-        <currency-index-component
+        <user-control-index-component
             :users="{{json_encode($users)}}"
         >
-        </currency-index-component>
+        </user-control-index-component>
     </div>
 @endsection
