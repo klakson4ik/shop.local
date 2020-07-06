@@ -23,7 +23,7 @@ Route::get('searching', 'SearchingController@getResultSearch');
 
 Route::resource('currency', 'CurrencyController');
 Route::resource('category', 'CategoryController');
-Route::resource('user_control', 'UserControlController');
+Route::resource('user', 'UserController');
 
 Route::resource('mobile', 'MobileController');
 Route::resource('Television', 'TelevisionController');

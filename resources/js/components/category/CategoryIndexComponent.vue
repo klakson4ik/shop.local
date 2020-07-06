@@ -53,7 +53,6 @@
                 title = "Создание категории"
             >
                 <category-create-component
-                    title="Создание категории"
                     @close = "closeModalCreate"
                 />
                 <template #footer>

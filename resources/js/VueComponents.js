@@ -9,7 +9,7 @@ Vue.component('first-level-menu-component', require('./components/header/Menu/Fi
 //categories
 Vue.component('category-create-component', require('./components/category/CategoryCreateComponent.vue').default);
 Vue.component('category-index-component', require('./components/category/CategoryIndexComponent.vue').default);
-Vue.component('category-template-popup-component', require('./components/reusedComponents/TemplatePopupComponent.vue').default);
+// Vue.component('category-template-popup-component', require('./components/reusedComponents/TemplatePopupComponent.vue').default);
 Vue.component('category-snap-to-another-component', require('./components/category/СategorySnapToAnotherComponent.vue').default)
 
 //Search
@@ -27,8 +27,11 @@ Vue.component('table-pagination-component', require('./components/reusedComponen
 Vue.component('dropdown-component', require('./components/reusedComponents/DropdownComponent.vue').default)
 Vue.component('button-component', require('./components/reusedComponents/ButtonComponent.vue').default)
 Vue.component('search-component', require('./components/reusedComponents/SearchComponent.vue').default)
+Vue.component('template-popup-component', require('./components/reusedComponents/TemplatePopupComponent').default)
 
-//userControl
-Vue.component('user-control-index-component', require('./components/userControl/UserControlIndexComponent.vue').default)
+
+//user
+Vue.component('user-index-component', require('./components/user/UserIndexComponent.vue').default)
+Vue.component('user-create-component', require('./components/user/UserCreateComponent.vue').default)
 
 
