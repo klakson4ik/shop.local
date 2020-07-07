@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\ModelsDB\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -38,7 +40,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->body;
+        $validator = Validator::make($data, [
+            'name' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if ($validator->passes()) {
+
+            User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
+
+            return response()->json(['success'=>'Added new records.']);
+        }
+
+        return response()->json(['error'=>$validator->errors()->all()]);
     }
 
     /**
