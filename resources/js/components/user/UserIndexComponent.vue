@@ -52,10 +52,11 @@
             >
                 <user-create-component
                     ref ="addUser"
+                    @updateUsers = "updateUsers"
                 />
                 <template #footer>
                     <button-component
-                        btnName="Отменить"
+                        btnName="Закрыть"
                         @click="modalVisible = false"
                     />
                     <button-component
@@ -158,6 +159,14 @@
             saveNewUser(){
                 this.$refs['addUser'].addUser()
             },
+            updateUsers(user){
+                this.searchArray.push({
+                    name : user.name,
+                    email : user.email
+                    }
+                )
+                this.$refs['reRender'].splitArray()
+            }
         },
 
         created() {

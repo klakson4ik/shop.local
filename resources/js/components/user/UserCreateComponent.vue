@@ -37,7 +37,7 @@
                 email: '',
                 password: '',
                 confirmPassword: '',
-                error : {}
+                error : ''
             }
         },
         methods: {
@@ -50,6 +50,17 @@
                         password_confirmation : this.confirmPassword
                     }
                     this.fetchUser(user)
+                console.log(this.error)
+                if(typeof this.error.success.!== "undefined") {
+                    alert('пользоветель ' + user.name + 'добавлен')
+                    this.password = ''
+                    this.confirmPassword = ''
+                    this.$emit('updateUsers', user )
+                    this.login = ''
+                    this.email = ''
+
+
+                }
             },
             fetchUser(user){
                 fetch("user", {
@@ -66,8 +77,6 @@
                 })
                     .then(response => (response.json()))
                     .then(response =>  this.error = response)
-                    .then(response =>  console.log(this.error))
-
 
             }
         },

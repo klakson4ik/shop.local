@@ -1692,86 +1692,9 @@ __webpack_require__.r(__webpack_exports__);
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/user/UserCreateComponent.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "UserCreateComponent",
-  data: function data() {
-    return {
-      login: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      error: {}
-    };
-  },
-  methods: {
-    addUser: function addUser() {
-      var user = [];
-      user = {
-        name: this.login,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.confirmPassword
-      };
-      this.fetchUser(user);
-    },
-    fetchUser: function fetchUser(user) {
-      var _this = this;
-
-      fetch("user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json, text-plain, */*",
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-          title: "New user",
-          body: user
-        })
-      }).then(function (response) {
-        return response.json();
-      }).then(function (response) {
-        return _this.error = response;
-      }).then(function (response) {
-        return console.log(_this.error);
-      });
-    }
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /var/www/resources/js/components/user/UserCreateComponent.vue: Unexpected token (54:41)\n\n\u001b[0m \u001b[90m 52 | \u001b[39m                \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mfetchUser(user)\u001b[0m\n\u001b[0m \u001b[90m 53 | \u001b[39m            console\u001b[33m.\u001b[39mlog(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39merror)\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 | \u001b[39m            \u001b[36mif\u001b[39m(\u001b[36mtypeof\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39merror\u001b[33m.\u001b[39msuccess\u001b[33m.\u001b[39m\u001b[33m!==\u001b[39m \u001b[32m\"undefined\"\u001b[39m) {\u001b[0m\n\u001b[0m \u001b[90m    | \u001b[39m                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 55 | \u001b[39m                alert(\u001b[32m'пользоветель '\u001b[39m \u001b[33m+\u001b[39m user\u001b[33m.\u001b[39mname \u001b[33m+\u001b[39m \u001b[32m'добавлен'\u001b[39m)\u001b[0m\n\u001b[0m \u001b[90m 56 | \u001b[39m                \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpassword \u001b[33m=\u001b[39m \u001b[32m''\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 57 | \u001b[39m                \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mconfirmPassword \u001b[33m=\u001b[39m \u001b[32m''\u001b[39m\u001b[0m\n    at Parser._raise (/var/www/node_modules/@babel/parser/lib/index.js:754:17)\n    at Parser.raiseWithData (/var/www/node_modules/@babel/parser/lib/index.js:747:17)\n    at Parser.raise (/var/www/node_modules/@babel/parser/lib/index.js:741:17)\n    at Parser.unexpected (/var/www/node_modules/@babel/parser/lib/index.js:8844:16)\n    at Parser.parseIdentifierName (/var/www/node_modules/@babel/parser/lib/index.js:10860:18)\n    at Parser.parseIdentifier (/var/www/node_modules/@babel/parser/lib/index.js:10837:23)\n    at Parser.parseMaybePrivateName (/var/www/node_modules/@babel/parser/lib/index.js:10194:19)\n    at Parser.parseSubscript (/var/www/node_modules/@babel/parser/lib/index.js:9751:64)\n    at Parser.parseSubscripts (/var/www/node_modules/@babel/parser/lib/index.js:9716:19)\n    at Parser.parseExprSubscripts (/var/www/node_modules/@babel/parser/lib/index.js:9699:17)\n    at Parser.parseMaybeUnary (/var/www/node_modules/@babel/parser/lib/index.js:9673:21)\n    at Parser.parseMaybeUnary (/var/www/node_modules/@babel/parser/lib/index.js:9653:28)\n    at Parser.parseExprOps (/var/www/node_modules/@babel/parser/lib/index.js:9543:23)\n    at Parser.parseMaybeConditional (/var/www/node_modules/@babel/parser/lib/index.js:9516:23)\n    at Parser.parseMaybeAssign (/var/www/node_modules/@babel/parser/lib/index.js:9471:21)\n    at Parser.parseExpression (/var/www/node_modules/@babel/parser/lib/index.js:9423:23)\n    at Parser.parseHeaderExpression (/var/www/node_modules/@babel/parser/lib/index.js:11462:22)\n    at Parser.parseIfStatement (/var/www/node_modules/@babel/parser/lib/index.js:11544:22)\n    at Parser.parseStatementContent (/var/www/node_modules/@babel/parser/lib/index.js:11238:21)\n    at Parser.parseStatement (/var/www/node_modules/@babel/parser/lib/index.js:11193:17)\n    at Parser.parseBlockOrModuleBlockBody (/var/www/node_modules/@babel/parser/lib/index.js:11768:25)\n    at Parser.parseBlockBody (/var/www/node_modules/@babel/parser/lib/index.js:11754:10)\n    at Parser.parseBlock (/var/www/node_modules/@babel/parser/lib/index.js:11738:10)\n    at Parser.parseFunctionBody (/var/www/node_modules/@babel/parser/lib/index.js:10745:24)\n    at Parser.parseFunctionBodyAndFinish (/var/www/node_modules/@babel/parser/lib/index.js:10728:10)\n    at Parser.parseMethod (/var/www/node_modules/@babel/parser/lib/index.js:10690:10)\n    at Parser.parseObjectMethod (/var/www/node_modules/@babel/parser/lib/index.js:10606:19)\n    at Parser.parseObjPropValue (/var/www/node_modules/@babel/parser/lib/index.js:10648:23)\n    at Parser.parseObjectMember (/var/www/node_modules/@babel/parser/lib/index.js:10572:10)\n    at Parser.parseObj (/var/www/node_modules/@babel/parser/lib/index.js:10485:25)\n    at Parser.parseExprAtom (/var/www/node_modules/@babel/parser/lib/index.js:10092:28)\n    at Parser.parseExprSubscripts (/var/www/node_modules/@babel/parser/lib/index.js:9693:23)\n    at Parser.parseMaybeUnary (/var/www/node_modules/@babel/parser/lib/index.js:9673:21)\n    at Parser.parseExprOps (/var/www/node_modules/@babel/parser/lib/index.js:9543:23)\n    at Parser.parseMaybeConditional (/var/www/node_modules/@babel/parser/lib/index.js:9516:23)\n    at Parser.parseMaybeAssign (/var/www/node_modules/@babel/parser/lib/index.js:9471:21)");
 
 /***/ }),
 
@@ -1793,6 +1716,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
 //
 //
 //
@@ -1966,6 +1890,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     //
     saveNewUser: function saveNewUser() {
       this.$refs['addUser'].addUser();
+    },
+    updateUsers: function updateUsers(user) {
+      this.searchArray.push({
+        name: user.name,
+        email: user.email
+      });
+      this.$refs['reRender'].splitArray();
     }
   },
   created: function created() {
@@ -5206,7 +5137,7 @@ var render = function() {
                       fn: function() {
                         return [
                           _c("button-component", {
-                            attrs: { btnName: "Отменить" },
+                            attrs: { btnName: "Закрыть" },
                             on: {
                               click: function($event) {
                                 _vm.modalVisible = false
@@ -5225,10 +5156,15 @@ var render = function() {
                   ],
                   null,
                   false,
-                  3171770829
+                  3642067371
                 )
               },
-              [_c("user-create-component", { ref: "addUser" })],
+              [
+                _c("user-create-component", {
+                  ref: "addUser",
+                  on: { updateUsers: _vm.updateUsers }
+                })
+              ],
               1
             )
           ],
