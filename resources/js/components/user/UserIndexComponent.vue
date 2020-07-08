@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary" @click="modalVisible = true">Добавить пользователя</button>
+                <button type="button" class="btn btn-primary" @click="modalVisible = true, modalNewUserVisible = true">Добавить пользователя</button>
             </div>
             <div class="col">
                 <search-component
@@ -46,22 +46,44 @@
         </div>
 
 
-        <div v-if="modalVisible===true">
+        <div v-if="modalVisible===true && modalNewUserVisible===true">
             <template-popup-component
                 title = "Новый пользователь"
             >
                 <user-create-component
                     ref ="addUser"
-                    @updateUsers = "updateUsers"
+                    @updateNewUsers = "updateNewUsers"
                 />
                 <template #footer>
                     <button-component
                         btnName="Закрыть"
-                        @click="modalVisible = false"
+                        @click="modalVisible = false, modalNewUserVisible = false"
                     />
                     <button-component
                         btnName="Добавить"
                         @click="saveNewUser"
+                    />
+                </template>
+            </template-popup-component>
+        </div>
+
+        <div v-if="modalVisible===true && modalEditUserVisible === true">
+            <template-popup-component
+                title = "Редактирование пользовтеля"
+            >
+                <user-edit-component
+                    ref ="editUser"
+                    :editUserData = "editUserData"
+                    @updateEditUsers = "updateEditUsers"
+                />
+                <template #footer>
+                    <button-component
+                        btnName="Отменить"
+                        @click="modalVisible = false, modalEditUserVisible = false"
+                    />
+                    <button-component
+                        btnName="Сохранить"
+                        @click="saveEditUser"
                     />
                 </template>
             </template-popup-component>
@@ -75,18 +97,20 @@
     import TemplatePopupComponent from "../reusedComponents/TemplatePopupComponent";
     import ButtonComponent from "../reusedComponents/ButtonComponent";
     import TablePaginationComponent from "../reusedComponents/TablePaginationComponent";
+    import UserEditComponent from "./UserEditComponent";
 
     export default {
         name: "UserIndexComponent",
-        comments : {TemplatePopupComponent, ButtonComponent, TablePaginationComponent},
+        comments : {TemplatePopupComponent, ButtonComponent, TablePaginationComponent, UserEditComponent},
         props : ['users'],
         data: () => {
             return {
                 modalVisible : false,
                 modalNewUserVisible : false,
+                modalEditUserVisible : false,
                 searchArray : [],
                 userArray : [],
-                currencyAll : [],
+                editUserData : ''
             }
         },
         methods: {
@@ -109,25 +133,9 @@
                 }
             },
             edit(user){
-                this.modalNewUserVisible = true
-            },
-            edit1(user){
-                fetch("user/" + user.id, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-CSRF-TOKEN" :  document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        title: "Edit category ",
-                        body: user
-                    })
-                })
-                    .then(response => (response.json()))
-                    .then(response => {
-                        this.$refs['reRender'].splitArray()
-                    })
+                this.modalVisible = true
+                this.modalEditUserVisible = true
+                this.editUserData = user
             },
 
             deleteUser(user){
@@ -150,23 +158,36 @@
                     return false
             },
 
-            // newCurrency(){
-            //     fetch('currency/create')
-            //         .then(response => (response.json()))
-            //         .then(response => this.currencyAll = response.currencyAll)
-            // },
-            //
             saveNewUser(){
                 this.$refs['addUser'].addUser()
             },
-            updateUsers(user){
+
+            saveEditUser(){
+                this.$refs['editUser'].editUser()
+            },
+
+            updateNewUsers(user){
                 this.searchArray.push({
                     name : user.name,
                     email : user.email
                     }
                 )
                 this.$refs['reRender'].splitArray()
+                this.modalVisible = false
+                this.modalNewUserVisible = false
+                alert('пользоветель ' + user.name + ' добавлен')
+            },
+
+            updateEditUsers(user){
+                let elemID = this.users.findIndex(item=>item.id === user.id)
+                this.user.splice(elemID, 1)
+                this.searchArray = this.user
+                this.$refs['reRender'].splitArray()
+                this.modalVisible = false
+                this.modalEditUserVisible = false
+                alert('пользоветель ' + user.name + ' изменен')
             }
+
         },
 
         created() {

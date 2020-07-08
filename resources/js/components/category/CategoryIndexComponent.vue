@@ -23,7 +23,7 @@
                 <th scope="row">{{index+1}}</th>
                 <td class="d-flex justify-content-start">{{cat.title}}</td>
                 <td>
-                    <i class="fa fa-wrench " aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>
+                    <i aria-hidden="true" @click="showModal('edit'),editItem(cat)" ></i>
                 </td>
                 <td v-if="canDelete.includes(cat.id)">
                     <i class="fa fa-trash" aria-hidden="true" @click="deleteCat(cat)" ></i>

@@ -4,19 +4,17 @@
             <div class="form-group row">
                 <label for="name" class="col-6 col-form-label col-form-label-lg">Name</label>
                 <div class="col-6 mb-3">
+                    <p class="border  shadow border-warning p-1 mb-2">{{editUserData.name}}</p>
+                </div>
+                <div class="col-6 mb-3">
                     <input type="text" class="form-control form-control-lg" id="name" v-model="login">
                 </div>
-                <label for="email" class="col-6 col-form-label col-form-label-lg">E-mail Address</label>
-                <div class="col-6 mb-3">
-                    <input type="email" class="form-control form-control-lg" id="email" placeholder="you@example.com" v-model="email">
+                <label for="email" class="col-6 col-form-label col-form-label-lg">Email</label>
+                <div class="col-12 mb-3">
+                    <p class="border  shadow border-warning p-1 mb-2">{{editUserData.email}}</p>
                 </div>
-                <label for="password" class="col-6 col-form-label col-form-label-lg">Password</label>
                 <div class="col-6 mb-3">
-                    <input type="password" class="form-control form-control-lg" id="password" v-model="password">
-                </div>
-                <label for="confirm-password" class="col-6 col-form-label col-form-label-lg">Confirm password</label>
-                <div class="col-6 mb-1">
-                    <input type="password" class="form-control form-control-lg" id="confirm-password" v-model="confirmPassword">
+                    <input type="email" class="form-control form-control-lg" id="email"  v-model="email">
                 </div>
                 <div class=" col-6 d-flex justify-content-center"  v-for="err of error.error" :key="error.id">
                     <p id="confirm-password-text" class="font-italic text-danger" >
@@ -30,37 +28,35 @@
 
 <script>
     export default {
-        name: "UserCreateComponent",
+        name: "UserEditComponent",
+        props : ['editUserData'],
         data() {
             return {
-                login: '',
+                login : '',
                 email: '',
-                password: '',
-                confirmPassword: '',
                 error : ''
             }
         },
         methods: {
-            addUser() {
+            editUser() {
                 let user = []
                 user = {
                     name : this.login,
                     email : this.email,
-                    password : this.password,
-                    password_confirmation : this.confirmPassword
                 }
+                console.log(user)
                 this.fetchUser(user)
             },
             fetchUser(user){
-                fetch("user", {
-                    method: "POST",
+                fetch("user/" + this.editUserData.id, {
+                    method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json, text-plain, */*",
                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        title: "New user",
+                        title: "Edit user",
                         body: user
                     })
                 })
@@ -68,14 +64,13 @@
                     .then(response =>  this.error = response)
                     .then((response) => {
                             if (typeof response.success !== "undefined") {
-                                this.$emit('updateNewUsers', user)
+                                this.$emit('updateEditUsers', user)
                             }
                         }
                     )
 
             }
         },
-
     }
 </script>
 

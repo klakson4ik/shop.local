@@ -33,5 +33,6 @@ Vue.component('template-popup-component', require('./components/reusedComponents
 //user
 Vue.component('user-index-component', require('./components/user/UserIndexComponent.vue').default)
 Vue.component('user-create-component', require('./components/user/UserCreateComponent.vue').default)
+Vue.component('user-edit-component', require('./components/user/UserEditComponent.vue').default)
 
 
