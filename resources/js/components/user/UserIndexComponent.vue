@@ -179,9 +179,9 @@
             },
 
             updateEditUsers(user){
-                let elemID = this.users.findIndex(item=>item.id === user.id)
-                this.user.splice(elemID, 1)
-                this.searchArray = this.user
+                let elemID = this.searchArray.findIndex(item=>item.id === user.id)
+                this.searchArray[elemID].name = user.name
+                this.searchArray[elemID].email= user.email
                 this.$refs['reRender'].splitArray()
                 this.modalVisible = false
                 this.modalEditUserVisible = false

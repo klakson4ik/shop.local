@@ -1828,10 +1828,10 @@ __webpack_require__.r(__webpack_exports__);
     editUser: function editUser() {
       var user = [];
       user = {
+        id: this.editUserData,
         name: this.login,
         email: this.email
       };
-      console.log(user);
       this.fetchUser(user);
     },
     fetchUser: function fetchUser(user) {
@@ -2072,11 +2072,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       alert('пользоветель ' + user.name + ' добавлен');
     },
     updateEditUsers: function updateEditUsers(user) {
-      var elemID = this.users.findIndex(function (item) {
+      var elemID = this.searchArray.findIndex(function (item) {
         return item.id === user.id;
       });
-      this.user.splice(elemID, 1);
-      this.searchArray = this.user;
+      this.searchArray[elemID].name = user.name;
+      this.searchArray[elemID].email = user.email;
       this.$refs['reRender'].splitArray();
       this.modalVisible = false;
       this.modalEditUserVisible = false;

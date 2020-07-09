@@ -41,10 +41,10 @@
             editUser() {
                 let user = []
                 user = {
+                    id : this.editUserData,
                     name : this.login,
                     email : this.email,
                 }
-                console.log(user)
                 this.fetchUser(user)
             },
             fetchUser(user){
