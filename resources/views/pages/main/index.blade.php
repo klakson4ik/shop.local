@@ -1,10 +1,16 @@
+@extends('layouts.base')
+
 @section('slayder')
 @show
 
 @section('left-column')
 
     @forelse($products as $product)
-        @include('pages.general.EachProduct')
+        @php
+            dump($product)
+        @endphp
+
+{{--        @include('pages.general.EachProduct')--}}
     @empty
         <h2>Ничего нет</h2>
     @endforelse

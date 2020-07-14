@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\ModelsDB\Mobile;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index(){
-        return view('layouts.base');
+        $telephone = Mobile::all();
+        return view('pages.main.index',[
+            'products' => $telephone
+            ]);
     }
 }

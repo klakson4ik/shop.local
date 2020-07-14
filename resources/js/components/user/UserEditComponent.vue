@@ -41,7 +41,7 @@
             editUser() {
                 let user = []
                 user = {
-                    id : this.editUserData,
+                    id : this.editUserData.id,
                     name : this.login,
                     email : this.email,
                 }
