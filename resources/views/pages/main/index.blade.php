@@ -1,23 +1,21 @@
 @extends('layouts.base')
 
-@section('slayder')
-@show
+@section('content')
+    @section('slayder')
+    @show
 
-@section('left-column')
+    @section('left-column')
 
-    @forelse($products as $product)
-        @php
-            dump($product)
-        @endphp
-
-{{--        @include('pages.general.EachProduct')--}}
-    @empty
-        <h2>Ничего нет</h2>
-    @endforelse
+        @forelse($products as $product)
+            @include('pages.main.oneProduct')
+        @empty
+            <h2>Ничего нет</h2>
+        @endforelse
 
 
-@show
+    @show
 
-@section('right-column')
-@show
+    @section('right-column')
+    @show
+@endsection
 
