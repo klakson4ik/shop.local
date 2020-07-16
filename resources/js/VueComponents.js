@@ -35,5 +35,5 @@ Vue.component('user-index-component', require('./components/user/UserIndexCompon
 Vue.component('user-create-component', require('./components/user/UserCreateComponent.vue').default)
 Vue.component('user-edit-component', require('./components/user/UserEditComponent.vue').default)
 
-//products
+//Products
 Vue.component('one-product', require('./components/products/OneProduct.vue').default)

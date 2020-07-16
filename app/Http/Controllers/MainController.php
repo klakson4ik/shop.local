@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\ModelsDB\Mobile;
+use App\Http\Models\Products\Products;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index(){
-        $telephone = Mobile::all();
-        return view('pages.main.index',[
-            'products' => $telephone
+        $products = Products::createArrayProducts();
+        return response()->view('pages.main.index',[
+            'products' => $products
             ]);
     }
 }

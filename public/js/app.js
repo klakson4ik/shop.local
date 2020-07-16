@@ -18947,7 +18947,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('template-popup-component',
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-index-component', __webpack_require__(/*! ./components/user/UserIndexComponent.vue */ "./resources/js/components/user/UserIndexComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-create-component', __webpack_require__(/*! ./components/user/UserCreateComponent.vue */ "./resources/js/components/user/UserCreateComponent.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-edit-component', __webpack_require__(/*! ./components/user/UserEditComponent.vue */ "./resources/js/components/user/UserEditComponent.vue")["default"]); //products
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-edit-component', __webpack_require__(/*! ./components/user/UserEditComponent.vue */ "./resources/js/components/user/UserEditComponent.vue")["default"]); //Products
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('one-product', __webpack_require__(/*! ./components/products/OneProduct.vue */ "./resources/js/components/products/OneProduct.vue")["default"]);
 
