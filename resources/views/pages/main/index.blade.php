@@ -6,16 +6,12 @@
 
     @section('left-column')
 
-        @forelse($products as $cat)
-            @foreach($cat as $product)
-                @php
-                    dump($product)
-                @endphp
+        @foreach($products as $cat)
+{{--                  <?php foreach ($cat as $product) :?>--}}
+{{--                  <?php dump($product) ; ?>--}}
 {{--                @include('pages.main.oneProduct')--}}
-            @endforeach
-        @empty
-            <h2>Ничего нет</h2>
-        @endforelse
+{{--                  <?php endforeach;?>--}}
+        @endforeach
 
 
     @show
