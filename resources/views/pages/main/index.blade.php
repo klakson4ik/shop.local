@@ -6,11 +6,8 @@
 
     @section('left-column')
 
-        @foreach($products as $cat)
-{{--                  <?php foreach ($cat as $product) :?>--}}
-{{--                  <?php dump($product) ; ?>--}}
-{{--                @include('pages.main.oneProduct')--}}
-{{--                  <?php endforeach;?>--}}
+        @foreach($products as $product)
+                @include('pages.main.oneProduct')
         @endforeach
 
 
