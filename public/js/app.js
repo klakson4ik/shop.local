@@ -2187,7 +2187,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.container[data-v-da672d4e]{\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr;\n    grid-template-rows: 1fr 1fr 1fr;\n}\n.img[data-v-da672d4e]{\n    grid-column: 1 / 2;\n    grid-row: 1 / 4;\n}\n", ""]);
+exports.push([module.i, "\n.container[data-v-da672d4e]{\n    display: grid;\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;\n    border: 1px solid black;\n    width: 300px;\n}\n.img[data-v-da672d4e]{\n    grid-row: 2  / 3\n}\n.title[data-v-da672d4e]{\n    grid-row: 1\n}\n.description[data-v-da672d4e]{\n    grid-row: 4;\n}\n.price[data-v-da672d4e]{\n    grid-row: 5;\n}\n\n", ""]);
 
 // exports
 
@@ -4841,12 +4841,12 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _vm._m(0),
-    _vm._v(" "),
     _c("div", { staticClass: "item title" }, [
       _c("a", { attrs: { href: "products/" + _vm.product.alias } }),
       _vm._v(_vm._s(_vm.product.title))
     ]),
+    _vm._v(" "),
+    _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "item price" }, [
       _c("p", [_vm._v(_vm._s(_vm.product.price))])
