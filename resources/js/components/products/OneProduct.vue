@@ -25,7 +25,10 @@
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
         border: 1px solid black;
-        width: 300px;
+        width: 25vw;
+        height: 25vw;
+        min-height: 320px;
+        min-width: 320px;
     }
 
     .img{
@@ -39,6 +42,10 @@
     }
     .price{
         grid-row: 5;
+    }
+
+    @media only screen and (min-width : 1280px){
+
     }
 
 </style>
