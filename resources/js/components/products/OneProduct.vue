@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="wrapper">
         <div class="item title"><a :href="'products/' + product.alias"></a>{{product.title}}</div>
         <div class="item img"><img src="#" alt="Сервер недоступен"></div>
         <div class="item price"><p>{{product.price}}</p></div>
@@ -20,7 +20,7 @@
 </script>
 
 <style scoped>
-    .container{
+    .wrapper{
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -29,6 +29,7 @@
         height: 25vw;
         min-height: 320px;
         min-width: 320px;
+        justify-self: center;
     }
 
     .img{
@@ -44,7 +45,18 @@
         grid-row: 5;
     }
 
-    @media only screen and (min-width : 1280px){
+    @media only screen and (max-width : 1102px){
+        .wrapper{
+            width: 35vw;
+            height: 35vw;
+        }
+
+    }
+    @media only screen and (max-width : 750px){
+        .wrapper{
+            width: 50vw;
+            height: 50vw;
+        }
 
     }
 

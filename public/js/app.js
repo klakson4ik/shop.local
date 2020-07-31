@@ -2187,7 +2187,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.container[data-v-da672d4e]{\n    display: grid;\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;\n    border: 1px solid black;\n    width: 25vw;\n    height: 25vw;\n    min-height: 320px;\n    min-width: 320px;\n}\n.img[data-v-da672d4e]{\n    grid-row: 2  / 3\n}\n.title[data-v-da672d4e]{\n    grid-row: 1\n}\n.description[data-v-da672d4e]{\n    grid-row: 4;\n}\n.price[data-v-da672d4e]{\n    grid-row: 5;\n}\n@media only screen and (min-width : 1280px){\n}\n\n", ""]);
+exports.push([module.i, "\n.wrapper[data-v-da672d4e]{\n    display: grid;\n    grid-template-columns: 1fr;\n    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;\n    border: 1px solid black;\n    width: 25vw;\n    height: 25vw;\n    min-height: 320px;\n    min-width: 320px;\n    justify-self: center;\n}\n.img[data-v-da672d4e]{\n    grid-row: 2  / 3\n}\n.title[data-v-da672d4e]{\n    grid-row: 1\n}\n.description[data-v-da672d4e]{\n    grid-row: 4;\n}\n.price[data-v-da672d4e]{\n    grid-row: 5;\n}\n@media only screen and (max-width : 1102px){\n.wrapper[data-v-da672d4e]{\n        width: 35vw;\n        height: 35vw;\n}\n}\n@media only screen and (max-width : 750px){\n.wrapper[data-v-da672d4e]{\n        width: 50vw;\n        height: 50vw;\n}\n}\n\n", ""]);
 
 // exports
 
@@ -4840,7 +4840,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
+  return _c("div", { staticClass: "wrapper" }, [
     _c("div", { staticClass: "item title" }, [
       _c("a", { attrs: { href: "products/" + _vm.product.alias } }),
       _vm._v(_vm._s(_vm.product.title))
