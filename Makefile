@@ -102,7 +102,7 @@ dlog:
 
 .PHONY: join-workspace
 jw:
-	cd $(LARADOCK) && docker exec -it $(WORKSPACE_CONTAINER_NAME) bash
+	cd $(LARADOCK) && docker exec -t $(WORKSPACE_CONTAINER_NAME) bash
 
 .PHONY: join-php
 jphp:
@@ -130,7 +130,7 @@ yi:
 
 .PHONY: watch-js
 wjs:
-	cd $(LARADOCK) && docker exec -it $(WORKSPACE_CONTAINER_NAME) yarn run watch-poll
+	cd $(LARADOCK) && docker exec -t $(WORKSPACE_CONTAINER_NAME) yarn run watch-poll
 #------------------
 
 # queue related targets

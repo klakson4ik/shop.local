@@ -11,9 +11,14 @@ class Products extends Model
         $fullArray=[];
         $baseArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
         foreach ($baseArray as $cat){
-            $fullArray[$cat] = DB::select("SELECT id,title,alias,price,quantity,description,brand FROM $cat");
+				$category= DB::select("SELECT id,title,alias,price,quantity,description,brand FROM $cat");
+				foreach($category as $product){
+					$fullArray[] = $product;	 	
+					 
+				}
+
         }
-        return $fullArray;
+        dd($fullArray);
 
     }
 }
