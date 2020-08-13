@@ -7,18 +7,21 @@ use Illuminate\Support\Facades\DB;
 
 class Products extends Model
 {
+		
+	const NUMBER_PAGINATION = 10;
+
+
+
     public static function createArrayProducts(){
         $fullArray=[];
-        $baseArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
+        $baseArray = ['Computer', 'Large_technicals', 'Mobiles', 'Televisions'];
         foreach ($baseArray as $cat){
-				$category= DB::select("SELECT id,title,alias,price,quantity,description,brand FROM $cat");
-				foreach($category as $product){
-					$fullArray[] = $product;	 	
-					 
-				}
-
+				$temp = 'App\ModelsDB\\' .$cat;
+            $class = new $temp();
+				$category = $class::paginate(self::NUMBER_PAGINATION); 
+				dd($category);
         }
-        dd($fullArray);
+       dd($fullArray);
 
     }
 }
