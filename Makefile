@@ -102,7 +102,7 @@ dlog:
 
 .PHONY: join-workspace
 jw:
-	cd $(LARADOCK) && docker exec -t $(WORKSPACE_CONTAINER_NAME) bash
+	cd $(LARADOCK) && docker exec -it $(WORKSPACE_CONTAINER_NAME) bash
 
 .PHONY: join-php
 jphp:

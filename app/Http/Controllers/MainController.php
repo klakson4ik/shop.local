@@ -9,6 +9,7 @@ class MainController extends Controller
 {
     public function index(){
         $products = Products::createArrayProducts();
+#		  dd($products);
         return response()->view('pages.main.index',[
             'products' => $products
             ]);

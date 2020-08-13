@@ -13,7 +13,9 @@
     @show
 
     @section('right-column')
-    @show
+	 @show
+
+	 @include('vendor.pagination.default')
 @endsection
 
 <style>
