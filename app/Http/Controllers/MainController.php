@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    public function index(){
-        $products = Products::createArrayProducts();
-#		  dd($products);
+    public function index(Request $request){
+		  $page = $request->get('page');
+        $products = Products::createArrayProducts($page);
         return response()->view('pages.main.index',[
-            'products' => $products
+            'products' => $products,
+				'paginator' => $products
             ]);
     }
 }

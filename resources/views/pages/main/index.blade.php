@@ -11,11 +11,16 @@
             @endforeach
         </div>
     @show
+	
+	@section('left-column')
+		<div class="wrapper">
+			@include('vendor.pagination.default')	
+		</div>
+	@show
 
     @section('right-column')
 	 @show
 
-	 @include('vendor.pagination.default')
 @endsection
 
 <style>
