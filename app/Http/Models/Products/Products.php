@@ -38,7 +38,6 @@ class Products extends Model
  	$fullArray=[];
  	$baseArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
    foreach ($baseArray as $cat){
-		return Computer::paginate(10);
    	$products = DB::select("SELECT id,title,alias,price,quantity,description,brand FROM $cat");
 		foreach($products as $product){
 			$fullArray[] = $product;
@@ -47,8 +46,10 @@ class Products extends Model
 
    }
 
-#	return array_slice($fullArray, $page*self::NUMBER_PAGINATION, self::NUMBER_PAGINATION);
-	return new Paginator($fullArray, self::NUMBER_PAGINATION);
+	$product['items']=array_slice($fullArray, $page*self::NUMBER_PAGINATION, self::NUMBER_PAGINATION);
+	$product['perPage']=self::NUMBER_PAGINATION;
+	$product['
+#	return new Paginator($fullArray, self::NUMBER_PAGINATION);
 
   
 }
