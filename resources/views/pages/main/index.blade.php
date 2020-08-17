@@ -11,15 +11,11 @@
             @endforeach
         </div>
     @show
-	
-	@section('left-column')
-		<div class="wrapper">
-			@include('vendor.pagination.default')	
-		</div>
-	@show
 
     @section('right-column')
 	 @show
+
+	<a href="/?page=". @php $products['page']+1 @endphp>>></a>
 
 @endsection
 

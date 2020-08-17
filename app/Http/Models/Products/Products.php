@@ -47,8 +47,9 @@ class Products extends Model
    }
 
 	$product['items']=array_slice($fullArray, $page*self::NUMBER_PAGINATION, self::NUMBER_PAGINATION);
-	$product['perPage']=self::NUMBER_PAGINATION;
-	$product['
+	$product['page'] = $page;
+#`	$product['perPage']=self::NUMBER_PAGINATION;
+#	$product['
 #	return new Paginator($fullArray, self::NUMBER_PAGINATION);
 
   
