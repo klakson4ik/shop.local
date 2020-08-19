@@ -11,51 +11,29 @@ class Products extends Model
 {
 		
 	const NUMBER_PAGINATION = 10;
+	private $products = [];
+	private $page;
 
 
+	public function __constuct($page){
+ 		$tableArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
+  		foreach ($tableArray as $table){
+   		$dataDB = DB::select("SELECT id,title,alias,price,quantity,description,brand FROM $table");
+			foreach($DataDB as $product){
+				$this->products[] = $product;
+			}
+		$this->page = $page;
+	}
+
+		
+	public function getProducts(){
+		return = array_slice($this->products, $this->page*self::NUMBER_PAGINATION, self::NUMBER_PAGINATION);
+	}
 
 
-#    public static function createArrayProducts(){
-			#	$fullArray = new Paginator();
-#				$fullArray = [];
-#        $baseArray = ['Computer', 'LargeTechnical', 'Mobile', 'Television'];
-#        foreach ($baseArray as $cat){
-#				$temp = 'App\ModelsDB\\' .$cat;
-#            $class = new $temp();
-#				$category = $class::paginate(self::NUMBER_PAGINATION); 
-#				dd($category);
-#				$products = $class::all();
-			#	dd($products);
-#				foreach( $products as $product){
-#					$fullArray->push($product);
-#				}
-# 			}       
-#       dd($fullArray);
-
- #   }
-
- public static function createArrayProducts($page){
- 	$fullArray=[];
- 	$baseArray = ['computers', 'large_technicals', 'mobiles', 'televisions'];
-   foreach ($baseArray as $cat){
-   	$products = DB::select("SELECT id,title,alias,price,quantity,description,brand FROM $cat");
-		foreach($products as $product){
-			$fullArray[] = $product;
-			
-		}
-
-   }
-
-	$product['items']=array_slice($fullArray, $page*self::NUMBER_PAGINATION, self::NUMBER_PAGINATION);
-	$product['page'] = $page;
-#`	$product['perPage']=self::NUMBER_PAGINATION;
-#	$product['
-#	return new Paginator($fullArray, self::NUMBER_PAGINATION);
-
+	public function getPaginate(){
+		$paginate['page'] = $this->page;
+		return $paginate;
+	}
   
-}
-	
-	
-
-	
 }

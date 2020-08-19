@@ -28,6 +28,7 @@ Vue.component('dropdown-component', require('./components/reusedComponents/Dropd
 Vue.component('button-component', require('./components/reusedComponents/ButtonComponent.vue').default)
 Vue.component('search-component', require('./components/reusedComponents/SearchComponent.vue').default)
 Vue.component('template-popup-component', require('./components/reusedComponents/TemplatePopupComponent').default)
+Vue.component('pagination-main-component', require('./components/reusedComponents/paginationMainComponent').default)
 
 
 //user

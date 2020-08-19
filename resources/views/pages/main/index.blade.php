@@ -5,8 +5,9 @@
     @show
 
     @section('left-column')
+
         <div class="wrapper">
-            @foreach($products as $product)
+            @foreach($products['items'] as $product)
                     @include('pages.main.oneProduct')
             @endforeach
         </div>
@@ -14,9 +15,10 @@
 
     @section('right-column')
 	 @show
-
-	<a href="/?page=". @php $products['page']+1 @endphp>>></a>
-
+	 
+	@section('pagination')
+		@include('vendor.pagination.main')
+	@show
 @endsection
 
 <style>
