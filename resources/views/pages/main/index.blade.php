@@ -7,7 +7,7 @@
     @section('left-column')
 
         <div class="wrapper">
-            @foreach($products['items'] as $product)
+            @foreach($products as $product)
                     @include('pages.main.oneProduct')
             @endforeach
         </div>

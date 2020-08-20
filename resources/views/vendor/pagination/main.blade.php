@@ -1,4 +1,4 @@
 <pagination-main-component
-	:paginate-data="{{json_encode($products['paginate']) ?? '' }}"
+	:paginate-data="{{json_encode($paginate) ?? '' }}"
 >
 </pagination-main-component>
