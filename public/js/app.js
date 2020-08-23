@@ -1527,24 +1527,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PaginationMainComponent",
   component: {
     DropdownComponent: _DropdownComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['array'],
+  props: ['paginationData'],
   data: function data() {
-    return {};
+    return {
+      startPage: ""
+    };
   },
   methods: {
-    uriPageNumberEnd: function uriPageNumberEnd() {},
+    numberStartPage: function numberStartPage() {
+      var countPage = this.paginationData['countShowPage'];
+      var currentPage = this.paginationData['currentPage'];
+      var floorCount = Math.floor(countPage / 2);
+      var ceilCount = countPage - floorCount;
+
+      if (currentPage - floorCount < 2) {
+        this.startPage = 1;
+      } else if (currentPage + ceilCount > this.paginationData['countPage'] - 1) {
+        this.startPage = this.paginationData['countPage'] - countPage;
+      } else {
+        this.startPage = currentPage - floorCount;
+      }
+    },
     nextPage: function nextPage() {},
     previousPage: function previousPage() {},
     lastPage: function lastPage() {},
     firstPage: function firstPage() {}
   },
-  created: function created() {}
+  created: function created() {
+    this.numberStartPage();
+  }
 });
 
 /***/ }),
@@ -5038,38 +5058,8 @@ render._withStripped = true
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("nav", [
-    _c("ul", [
-      _c("li", [
-        _c("a", { attrs: { href: "#" }, on: { click: _vm.firstPage } }, [
-          _vm._v("First")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { href: "#" }, on: { click: _vm.previousPage } })
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { href: "#" }, on: { click: _vm.nextPage } }, [
-          _vm._v(">")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { attrs: { href: "#" }, on: { click: _vm.lastPage } }, [
-          _vm._v("Last")
-        ])
-      ])
-    ])
-  ])
-}
+var render = function () {}
 var staticRenderFns = []
-render._withStripped = true
 
 
 
