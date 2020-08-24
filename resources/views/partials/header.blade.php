@@ -1,33 +1,19 @@
 <div class="header">
-	<div class="currency"
-		@section('change-currency')
-			 @include('pages.currency.select')
-		@show
+	<div class="header-currency">
+		@include('pages.currency.select')
 	</div>
-	@section('auth-reg')
+	<div class="header-auth">
 		@include('auth.widgets')
-	@show
-
-	@section('search-panel')
+	</div>
+	<div class="header-search">
 		@include('pages.search.generalSearch')
-	@show
-
+	</div>
+	<div class="header-basket">
 	@section('basket')
 	@show
-
-	@section('main-menu')
+	</div>
+	<div class="header-category">
 		@include('pages.category.main_menu')
-	@show
+	</div>
 </div>
 
-<style>
-	.header{
-		display: grid;
-		grid-template-rows: 1fr 1fr;
-		grid-template-columns: 1fr 1fr 1fr;
-	}
-
-	.currency{
-		
-	}
-</style>
