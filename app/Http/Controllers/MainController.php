@@ -12,7 +12,7 @@ class MainController extends Controller
 #				if(isset($request)
 		 $page = $request->get('page');
        $arrayProducts = Products :: getArrayProducts();
-		 $paginationClass = new Pagination($arrayProducts, $page, 5);
+		 $paginationClass = new Pagination($arrayProducts, $page, 10);
 		 $sliceProducts = $paginationClass->getSliceArray();
 		 $pagination = $paginationClass->getPaginationData();
 		 

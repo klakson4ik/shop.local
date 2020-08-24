@@ -4,12 +4,12 @@ namespace App\Http\Models\Vendor;
 
 class Pagination
 {
-	private $perPage = 3;	
+	private $perPage = 9;	
 	private $array;
 	private $currentPage = 1;
 	private $items;
 	private $countPage;
-	private $countShowPage = 5;
+	private $countShowPage = 10;
 
 
 	public function __construct($array, $page, $countShowPage){
