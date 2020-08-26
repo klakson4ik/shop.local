@@ -188,7 +188,7 @@ up-ngrok:
 #policiec maks
 .PHONY: chown
 chown:
-	sudo chown maks:maks -R ./
+	sudo chown maks:users -R ./
 
 .PHONY: git push
 push:
