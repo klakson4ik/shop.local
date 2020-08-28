@@ -38,3 +38,6 @@ Vue.component('user-edit-component', require('./components/user/UserEditComponen
 
 //Products
 Vue.component('one-product', require('./components/products/OneProduct.vue').default)
+
+//filters
+Vue.component('filters-view-component', require('./components/filter/FiltersViewComponent.vue').default)

@@ -11,17 +11,20 @@ class Filter
 	private $tableCategory;
 	private $filters;
 	private $categories;
-	private $standartfilter;
+	private $standartfilters;
 	private $arrayProducts;
+	private $typeFilter;
 
 	public function __construct($arrayProducts){
+		$this->typeFilter = $this->getTypeFilter();
 		$this->tableCategory = Category :: all();
-		$this->categories = $this->getRootCategory();
+		$this->categories = $this->getCategory();
 		$this->arrayProducts = $arrayProducts;
-		$this->standartFilter = $this->getStandartFilter();
+		$this->standartFilters = $this->getStandartFilter();
+		$this->filters = $this->consistFilters();
 	}
 
-	private function getRootCategory(){
+	private function getCategory(){
 		$array = [];
 		foreach($this->tableCategory as $category){
 			if($category->parent_id == NULL){
@@ -34,17 +37,35 @@ class Filter
 	}
 
 	private function getStandartfilter(){
-		$brand = [];
-		$maxMinPrice = ['min' => 0, 'max' => 0];		  
+		$brands = ['type' => $this->typeFilter[0]];
+		$defaultPrice = $this->arrayProducts[0]->price;
+		$minMaxPrice = ['min' => $defaultPrice, 'max' => $defaultPrice];		  
 		foreach($this->arrayProducts as $product){
-			if(!in_array($product->brand, $brand) && $product->brand != NULL){
-				$brand[] = $product->brand;
+			if(!in_array($product->brand, $brands) && $product->brand != NULL){
+				$brands[] = $product->brand;
 			}
+
+			if($product->price < $minMaxPrice['min']){
+				$minMaxPrice['min'] = $product->price;		  
+			}
+
+			if($product->price > $minMaxPrice['max']){
+				$minMaxPrice['max'] = $product->price;
+			}	  
 		}
-		return $array;
+		dd($brands);
+		return ['brands' => $brands, 'minMaxPrice' => $minMaxPrice];
+	}
+
+	private function consistFilters(){
+		return ['rootsCategories' => $this->categories['rootsCategories'], 'categories' => $this->categories['categories'], 'brands' => $this->standartFilters['brands'], 'minMaxPrice' => $this->standartFilters['minMaxPrice']];
+	}
+
+	private function getTypeFilter(){
+		return ['checkbox', 'scroll'];
 	}
 	
-	public function getDefualtFilter(){
+	public function getFilters(){
 		return $this->filters;
 	}	  
 

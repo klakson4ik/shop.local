@@ -14,6 +14,7 @@
     @show
 
     @section('right-column')
+		@include('pages.main.filters')
 	 @show
 	 
 	@section('pagination')
