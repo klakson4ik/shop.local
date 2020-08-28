@@ -12,10 +12,12 @@ class Filter
 	private $filters;
 	private $categories;
 	private $standartfilter;
+	private $arrayProducts;
 
-	public function __construct(){
+	public function __construct($arrayProducts){
 		$this->tableCategory = Category :: all();
 		$this->categories = $this->getRootCategory();
+		$this->arrayProducts = $arrayProducts;
 		$this->standartFilter = $this->getStandartFilter();
 	}
 
@@ -32,17 +34,18 @@ class Filter
 	}
 
 	private function getStandartfilter(){
-		$data = Products :: getArrayProducts();
-		$brand = [];		  
-		foreach($data as $product){
-			if(!in_array($product['brand'], $brand){
-				$brand[] = $product['brand'];
+		$brand = [];
+		$maxMinPrice = ['min' => 0, 'max' => 0];		  
+		foreach($this->arrayProducts as $product){
+			if(!in_array($product->brand, $brand) && $product->brand != NULL){
+				$brand[] = $product->brand;
 			}
 		}
-		dd($brand);
+		return $array;
 	}
-
+	
 	public function getDefualtFilter(){
 		return $this->filters;
 	}	  
+
 }

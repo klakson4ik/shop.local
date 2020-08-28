@@ -16,7 +16,7 @@ class MainController extends Controller
 		 $paginationClass = new Pagination($arrayProducts, $page, 10);
 		 $sliceProducts = $paginationClass->getSliceArray();
 		 $pagination = $paginationClass->getPaginationData();
-		 $filterClass = new Filter();
+		 $filterClass = new Filter($arrayProducts);
 		 
 		 return response()->view('pages.main.index',[
 					'products' => $sliceProducts,
