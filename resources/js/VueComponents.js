@@ -41,3 +41,5 @@ Vue.component('one-product', require('./components/products/OneProduct.vue').def
 
 //filters
 Vue.component('filters-view-component', require('./components/filter/FiltersViewComponent.vue').default)
+Vue.component('filter-checkbox-component', require('./components/filter/FilterCheckboxComponent.vue').default)
+Vue.component('filter-scroll-component', require('./components/filter/FilterScrollComponent.vue').default)
